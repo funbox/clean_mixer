@@ -1,26 +1,20 @@
 defmodule CleanMixer.CompilerManifests.App do
+  alias CleanMixer.CompilerManifests.MixProject
   alias __MODULE__
 
   @manifest_filename "compile.elixir"
 
   defstruct [:path, :name, :manifest_path]
 
-  @type t :: %{
+  @type t :: %__MODULE__{
           path: Path.t(),
           name: :atom,
           manifest_path: Path.t()
         }
 
-  def project_apps() do
-    if Mix.Project.umbrella?() do
-      umbrella_apps()
-    else
-      [current_app()]
-    end
-  end
-
-  defp umbrella_apps do
-    for %{app: app_name, scm: Mix.SCM.Path, opts: opts} <- Mix.Dep.cached(), opts[:from_umbrella] do
+  @spec umbrella_project_apps(list(MixProject.mix_dep())) :: list(t)
+  def umbrella_project_apps(deps) do
+    for %{app: app_name, scm: Mix.SCM.Path, opts: opts} <- deps, opts[:from_umbrella] do
       %App{
         path: opts[:path],
         name: app_name,
@@ -29,7 +23,8 @@ defmodule CleanMixer.CompilerManifests.App do
     end
   end
 
-  defp current_app() do
+  @spec current() :: t
+  def current() do
     %App{
       path: "",
       name: Mix.Project.config() |> Keyword.fetch!(:app),

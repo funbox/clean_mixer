@@ -3,17 +3,17 @@ defmodule CleanMixer.CodeGraph.ModuleReference do
 
   @type ref_type :: :compile | :struct | :runtime
 
-  defstruct [:module, :ref_type]
+  defstruct [:module_name, :ref_type]
 
   @type t :: %__MODULE__{
-          module: CodeModule.t(),
+          module_name: CodeModule.name(),
           ref_type: ref_type
         }
 
-  @spec new(CodeModule.t(), ref_type) :: t
-  def new(module, type) do
+  @spec new(CodeModule.name(), ref_type) :: t
+  def new(module_name, type) do
     %__MODULE__{
-      module: module,
+      module_name: module_name,
       ref_type: type
     }
   end
