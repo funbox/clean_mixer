@@ -1,4 +1,4 @@
-defmodule CleanMixer.CodeGraph.CodeModule do
+defmodule CleanMixer.CodeMap.CodeModule do
   @type name :: module()
 
   defstruct [:name, :path]

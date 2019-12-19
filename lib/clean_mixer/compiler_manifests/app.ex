@@ -1,6 +1,5 @@
 defmodule CleanMixer.CompilerManifests.App do
   alias CleanMixer.CompilerManifests.MixProject
-  alias __MODULE__
 
   @manifest_filename "compile.elixir"
 
@@ -15,7 +14,7 @@ defmodule CleanMixer.CompilerManifests.App do
   @spec umbrella_project_apps(list(MixProject.mix_dep())) :: list(t)
   def umbrella_project_apps(deps) do
     for %{app: app_name, scm: Mix.SCM.Path, opts: opts} <- deps, opts[:from_umbrella] do
-      %App{
+      %__MODULE__{
         path: opts[:path],
         name: app_name,
         manifest_path: Path.join([opts[:build], ".mix", @manifest_filename])
@@ -25,7 +24,7 @@ defmodule CleanMixer.CompilerManifests.App do
 
   @spec current() :: t
   def current() do
-    %App{
+    %__MODULE__{
       path: "",
       name: Mix.Project.config() |> Keyword.fetch!(:app),
       manifest_path: Mix.Project.manifest_path() |> Path.join(@manifest_filename)

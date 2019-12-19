@@ -1,5 +1,5 @@
-defmodule CleanMixer.CodeGraph.ModuleReference do
-  alias CleanMixer.CodeGraph.CodeModule
+defmodule CleanMixer.CodeMap.ModuleReference do
+  alias CleanMixer.CodeMap.CodeModule
 
   @type ref_type :: :compile | :struct | :runtime
 
