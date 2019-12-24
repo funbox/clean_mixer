@@ -21,9 +21,15 @@ defmodule CleanMixer.ArchMapTest do
     ]
 
     assert [
-             Dependency.new(comp1, comp2),
-             Dependency.new(comp1, comp3),
-             Dependency.new(comp2, comp1)
+             Dependency.new(comp1, comp2, [
+               FileDependency.new(SourceFile.new("comp1/file1"), SourceFile.new("comp2/file1"), [:runtime])
+             ]),
+             Dependency.new(comp1, comp3, [
+               FileDependency.new(SourceFile.new("comp1/file2"), SourceFile.new("comp3/file1"), [:runtime])
+             ]),
+             Dependency.new(comp2, comp1, [
+               FileDependency.new(SourceFile.new("comp2/file1"), SourceFile.new("comp1/file1"), [:runtime])
+             ])
            ] ==
              ArchMap.new(components).dependencies
   end

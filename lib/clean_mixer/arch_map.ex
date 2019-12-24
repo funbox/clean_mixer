@@ -27,8 +27,11 @@ defmodule CleanMixer.ArchMap do
   defp dependencies_for(component, all_components) do
     other_components = all_components -- [component]
 
-    other_components
-    |> Enum.filter(&Component.has_dependency?(component, &1))
-    |> Enum.map(&Dependency.new(component, &1))
+    Enum.flat_map(other_components, fn other_comp ->
+      case Component.file_dependencies(component, other_comp) do
+        [] -> []
+        [_ | _] = deps -> [Dependency.new(component, other_comp, deps)]
+      end
+    end)
   end
 end

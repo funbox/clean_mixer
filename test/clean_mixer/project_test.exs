@@ -9,7 +9,7 @@ defmodule CleanMixer.ProjectTest do
   alias CleanMixer.Project
   alias CleanMixer.CodeCartographer
 
-  defmodule FakeCartographer do
+  defmodule BasicFakeCartographer do
     @behaviour CodeCartographer
 
     def get_code_map() do
@@ -34,7 +34,7 @@ defmodule CleanMixer.ProjectTest do
     project =
       component_map
       |> ArchConfig.new()
-      |> Project.new(CodeCartographer.new(FakeCartographer))
+      |> Project.new(CodeCartographer.new(BasicFakeCartographer))
 
     assert [
              Component.new(
@@ -47,6 +47,33 @@ defmodule CleanMixer.ProjectTest do
                [SourceFile.new("path2/file1")],
                [FileDependency.new(SourceFile.new("path2/file1"), SourceFile.new("path2/file2"), [:runtime])]
              )
+           ] == project.arch_map.components
+  end
+
+  defmodule NestedFakeCodeCartographer do
+    @behaviour CodeCartographer
+
+    def get_code_map() do
+      files = [
+        SourceFile.new("path/file"),
+        SourceFile.new("path/subpath/file")
+      ]
+
+      %CodeMap{files: files, dependencies: []}
+    end
+  end
+
+  test "supports nested components" do
+    component_map = %{"component" => "path", "subcomponent" => "path/subpath"}
+
+    project =
+      component_map
+      |> ArchConfig.new()
+      |> Project.new(CodeCartographer.new(NestedFakeCodeCartographer))
+
+    assert [
+             Component.new("component", [SourceFile.new("path/file"), SourceFile.new("path/subpath/file")]),
+             Component.new("subcomponent", [SourceFile.new("path/subpath/file")])
            ] == project.arch_map.components
   end
 end
