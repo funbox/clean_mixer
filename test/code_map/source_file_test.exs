@@ -1,7 +1,7 @@
-defmodule CleanMixer.CodeGraph.SourceFileTest do
+defmodule CleanMixer.CodeMap.SourceFileTest do
   use ExUnit.Case
 
-  alias CleanMixer.CodeGraph.SourceFile
+  alias CleanMixer.CodeMap.SourceFile
 
   describe "&prepend_path/2" do
     test "perepends new parent to source file path" do

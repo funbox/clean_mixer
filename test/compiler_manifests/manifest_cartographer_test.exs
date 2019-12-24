@@ -1,13 +1,13 @@
-defmodule CleanMixer.CompilerManifests.CodeGraphSourceTest do
+defmodule CleanMixer.CompilerManifests.ManifestCartographerTest do
   use ExUnit.Case
 
-  alias CleanMixer.CompilerManifests.CodeGraphSource
-  alias CleanMixer.CodeGraph
-  alias CleanMixer.CodeGraph.SourceFile
-  alias CleanMixer.CodeGraph.ModuleReference
+  alias CleanMixer.CompilerManifests.ManifestCartographer
+  alias CleanMixer.CodeMap
+  alias CleanMixer.CodeMap.SourceFile
+  alias CleanMixer.CodeMap.ModuleReference
 
-  test "returns code graph with files of current project" do
-    assert %CodeGraph{files: files} = CodeGraphSource.get_code_graph()
+  test "returns code map with files of current project" do
+    assert %CodeMap{files: files} = ManifestCartographer.get_code_map()
 
     doge_owner_module = Enum.find(files, &(&1.path =~ "doge_owner.ex"))
 

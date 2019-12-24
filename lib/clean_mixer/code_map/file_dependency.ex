@@ -1,6 +1,6 @@
-defmodule CleanMixer.CodeGraph.FileDependency do
-  alias CleanMixer.CodeGraph.SourceFile
-  alias CleanMixer.CodeGraph.ModuleReference
+defmodule CleanMixer.CodeMap.FileDependency do
+  alias CleanMixer.CodeMap.SourceFile
+  alias CleanMixer.CodeMap.ModuleReference
   defstruct [:source, :target, :ref_types]
 
   @type t :: %__MODULE__{

@@ -1,29 +1,24 @@
-defmodule CleanMixer.CodeGraph do
-  alias CleanMixer.CodeGraph.SourceFile
-  alias CleanMixer.CodeGraph.FileDependency
-  alias CleanMixer.CodeGraph.CodeModule
-  alias __MODULE__
+defmodule CleanMixer.CodeMap do
+  alias CleanMixer.CodeMap.SourceFile
+  alias CleanMixer.CodeMap.FileDependency
 
-  defstruct files: []
+  defstruct files: [],
+            dependencies: []
 
   @type t :: %__MODULE__{
-          files: list(SourceFile.t())
+          files: list(SourceFile.t()),
+          dependencies: list(FileDependency.t())
         }
 
   @spec new(list(SourceFile.t())) :: t
   def new(files) do
-    %__MODULE__{files: files}
-  end
-
-  @spec merge(t, t) :: t
-  def merge(graph, other_graph) do
     %__MODULE__{
-      files: Enum.uniq(graph.files ++ other_graph.files)
+      files: files,
+      dependencies: find_dependencies(files)
     }
   end
 
-  @spec dependencies(t) :: list(FileDependency.t())
-  def dependencies(%CodeGraph{files: files}) do
+  defp find_dependencies(files) do
     files
     |> Enum.flat_map(&file_dependencies_for(&1, files))
     |> Enum.uniq()

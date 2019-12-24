@@ -1,6 +1,5 @@
 defmodule CleanMixer.CompilerManifests.MixProject do
   alias CleanMixer.CompilerManifests.App
-  alias __MODULE__
 
   defstruct [:umbrella?, :deps]
 
@@ -12,17 +11,17 @@ defmodule CleanMixer.CompilerManifests.MixProject do
         }
 
   def current() do
-    %MixProject{
+    %__MODULE__{
       umbrella?: Mix.Project.umbrella?(),
       deps: Mix.Dep.cached()
     }
   end
 
-  def apps(%MixProject{umbrella?: true, deps: mix_deps}) do
+  def apps(%__MODULE__{umbrella?: true, deps: mix_deps}) do
     App.umbrella_project_apps(mix_deps)
   end
 
-  def apps(%MixProject{umbrella?: false}) do
+  def apps(%__MODULE__{umbrella?: false}) do
     [App.current()]
   end
 end
