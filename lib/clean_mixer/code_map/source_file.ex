@@ -11,7 +11,7 @@ defmodule CleanMixer.CodeMap.SourceFile do
         }
 
   @spec new(Path.t(), list(CodeModule.name()), list(ModuleReference.t())) :: t
-  def new(path, modules, refs) do
+  def new(path, modules \\ [], refs \\ []) do
     %__MODULE__{path: path, modules: modules, references: refs}
   end
 
