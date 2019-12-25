@@ -1,9 +1,9 @@
 defmodule CleanMixer.ArchConfig do
   alias CleanMixer.ArchMap.Component
 
-  @type component_map :: %{Component.name() => Path.t()}
+  @type component_map :: [{Component.name(), Path.t()}]
 
-  defstruct component_map: %{}
+  defstruct component_map: []
 
   @type t :: %__MODULE__{
           component_map: component_map

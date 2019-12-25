@@ -14,17 +14,22 @@ defmodule CleanMixer.ArchMap do
   def new(components) do
     %__MODULE__{
       components: components,
-      dependencies: find_dependencies(components)
+      dependencies: build_dependencies(components)
     }
   end
 
-  defp find_dependencies(components) do
+  @spec dependencies_for(t(), Component.t()) :: list(Dependency.t())
+  def dependencies_for(%__MODULE__{dependencies: deps}, %Component{} = component) do
+    Enum.filter(deps, &(&1.source == component))
+  end
+
+  defp build_dependencies(components) do
     components
-    |> Enum.flat_map(&dependencies_for(&1, components))
+    |> Enum.flat_map(&build_dependencies_for(&1, components))
     |> Enum.uniq()
   end
 
-  defp dependencies_for(component, all_components) do
+  defp build_dependencies_for(component, all_components) do
     other_components = all_components -- [component]
 
     Enum.flat_map(other_components, fn other_comp ->

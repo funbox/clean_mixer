@@ -2,25 +2,20 @@ defmodule CleanMixer.ArchMap.Dependency do
   alias CleanMixer.ArchMap.Component
   alias CleanMixer.CodeMap.FileDependency
 
-  defstruct [:source, :target, :file_dependencies]
+  defstruct [:source, :target, :files]
 
   @type t :: %__MODULE__{
           source: Component.t(),
           target: Component.t(),
-          file_dependencies: list(FileDependency.t())
+          files: list(FileDependency.t())
         }
 
   @spec new(Component.t(), Component.t(), list(FileDependency.t())) :: t
-  def new(source, target, file_dependencies) do
+  def new(source, target, file_deps) do
     %__MODULE__{
       source: source,
       target: target,
-      file_dependencies: file_dependencies
+      files: file_deps
     }
-  end
-
-  defimpl String.Chars do
-    def to_string(dep),
-      do: "#{dep.source.name} -> #{dep.target.name}"
   end
 end
