@@ -30,13 +30,32 @@ defmodule CleanMixer.ArchMap do
   end
 
   defp build_dependencies_for(component, all_components) do
-    other_components = all_components -- [component]
+    other_components =
+      (all_components -- [component])
+      |> Enum.sort_by(&Component.depth/1)
+      |> Enum.reverse()
 
-    Enum.flat_map(other_components, fn other_comp ->
-      case Component.file_dependencies(component, other_comp) do
+    build_dependencies_for(component, other_components, [])
+  end
+
+  # TODO refactor this mess
+
+  defp build_dependencies_for(_component, [] = _other_components, deps_so_far) do
+    deps_so_far
+  end
+
+  defp build_dependencies_for(component, [other_comp | rest_components], deps_so_far) do
+    deps =
+      case Component.file_dependencies(component, other_comp) |> filter_file_deps(deps_so_far) do
         [] -> []
         [_ | _] = deps -> [Dependency.new(component, other_comp, deps)]
       end
-    end)
+
+    build_dependencies_for(component, rest_components, deps ++ deps_so_far)
+  end
+
+  defp filter_file_deps(file_deps, component_deps) do
+    existing_deps = Enum.flat_map(component_deps, & &1.files)
+    file_deps -- existing_deps
   end
 end
