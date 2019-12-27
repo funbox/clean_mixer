@@ -18,22 +18,45 @@ defmodule CleanMixer.ArchMap.Component do
     %__MODULE__{name: name, files: files, file_dependencies: file_dependencies}
   end
 
+  # TODO test this
+
   @spec file_dependencies(t, t) :: list(FileDependency.t())
   def file_dependencies(component, other_component) do
     component.file_dependencies
-    # TODO test this and refactor
-    |> Enum.filter(&(&1.target in other_component.files && &1.target not in component.files))
+    |> Enum.filter(&(&1.target in other_component.files))
   end
 
-  # TODO test this and refactor
+  # TODO test this
+
+  @spec child?(t, t) :: boolean
+  def child?(child_component, parent_component) do
+    child_component.name
+    |> to_string()
+    |> String.starts_with?([parent_component.name, @subcomponent_delimiter] |> Enum.join())
+  end
+
+  # TODO test this
 
   @spec depth(t) :: pos_integer
   def depth(%__MODULE__{name: name}) do
     name
     |> to_string()
-    |> String.trim_leading(@subcomponent_delimiter)
-    |> String.trim_trailing(@subcomponent_delimiter)
-    |> String.split(@subcomponent_delimiter, trim: true)
-    |> Enum.count()
+    |> trim(@subcomponent_delimiter)
+    |> count_occurences(@subcomponent_delimiter)
+  end
+
+  defp count_occurences(string, symbol) do
+    subparts_count =
+      string
+      |> String.split(symbol, trim: true)
+      |> Enum.count()
+
+    subparts_count - 1
+  end
+
+  defp trim(string, symbol) do
+    string
+    |> String.trim_leading(symbol)
+    |> String.trim_trailing(symbol)
   end
 end

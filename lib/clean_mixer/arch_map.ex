@@ -25,37 +25,43 @@ defmodule CleanMixer.ArchMap do
 
   defp build_dependencies(components) do
     components
-    |> Enum.flat_map(&build_dependencies_for(&1, components))
+    |> Enum.flat_map(&build_deps_for(&1, components))
     |> Enum.uniq()
   end
 
-  defp build_dependencies_for(component, all_components) do
+  defp build_deps_for(component, all_components) do
     other_components =
       (all_components -- [component])
-      |> Enum.sort_by(&Component.depth/1)
-      |> Enum.reverse()
+      |> Enum.reject(&Component.child?(&1, component))
+      |> sort_by_deps()
 
-    build_dependencies_for(component, other_components, [])
+    build_deps_for(component, other_components, [])
   end
 
-  # TODO refactor this mess
-
-  defp build_dependencies_for(_component, [] = _other_components, deps_so_far) do
-    deps_so_far
+  defp sort_by_deps(components) do
+    components
+    |> Enum.sort_by(&Component.depth/1)
+    |> Enum.reverse()
   end
 
-  defp build_dependencies_for(component, [other_comp | rest_components], deps_so_far) do
-    deps =
-      case Component.file_dependencies(component, other_comp) |> filter_file_deps(deps_so_far) do
-        [] -> []
-        [_ | _] = deps -> [Dependency.new(component, other_comp, deps)]
-      end
-
-    build_dependencies_for(component, rest_components, deps ++ deps_so_far)
+  defp build_deps_for(_component, [] = _other_components, resulting_dependencies) do
+    Enum.reverse(resulting_dependencies)
   end
 
-  defp filter_file_deps(file_deps, component_deps) do
-    existing_deps = Enum.flat_map(component_deps, & &1.files)
-    file_deps -- existing_deps
+  defp build_deps_for(component, [other_comp | rest_components], deps_so_far) do
+    file_deps = Component.file_dependencies(component, other_comp) -- file_deps_of(deps_so_far)
+
+    case file_deps do
+      [] ->
+        build_deps_for(component, rest_components, deps_so_far)
+
+      [_ | _] ->
+        new_dep = Dependency.new(component, other_comp, file_deps)
+        build_deps_for(component, rest_components, [new_dep | deps_so_far])
+    end
+  end
+
+  defp file_deps_of(component_deps) do
+    Enum.flat_map(component_deps, & &1.files)
   end
 end
