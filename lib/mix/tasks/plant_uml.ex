@@ -7,12 +7,10 @@ defmodule Mix.Tasks.CleanMixer.PlantUml do
   alias Mix.Tasks.CleanMixer.UI.ArchMapRendering.PlantUML
   alias CleanMixer.Project
 
-  # TODO test this
-  # refactor this
-
   @file_name "clean_mixer"
-  @plantuml_file_name "#{@file_name}.plantuml"
-  @image_file_name "#{@file_name}.png"
+
+  def plantuml_file_name(), do: "#{@file_name}.plantuml"
+  def image_file_name(), do: "#{@file_name}.png"
 
   @impl Mix.Task
   def run(_args, _options \\ []) do
@@ -20,9 +18,9 @@ defmodule Mix.Tasks.CleanMixer.PlantUml do
     |> Project.new()
     |> get_arch_map()
     |> PlantUML.render()
-    |> render_image(@plantuml_file_name)
+    |> render_image(plantuml_file_name())
 
-    Mix.Shell.IO.info("image file created at #{@image_file_name}")
+    Mix.Shell.IO.info("image file created at #{image_file_name()}")
   end
 
   defp get_arch_map(%Project{arch_map: arch_map}), do: arch_map

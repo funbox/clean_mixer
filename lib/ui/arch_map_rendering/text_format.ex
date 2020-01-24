@@ -4,8 +4,6 @@ defmodule Mix.Tasks.CleanMixer.UI.ArchMapRendering.TextFormat do
   alias CleanMixer.ArchMap.Dependency
   alias CleanMixer.CodeMap.FileDependency
 
-  # TODO test this
-
   @spec render(ArchMap.t()) :: String.t()
   def render(%ArchMap{} = arch_map) do
     arch_map.components

@@ -7,8 +7,6 @@ defmodule Mix.Tasks.CleanMixer.List do
   alias Mix.Tasks.CleanMixer.UI.ArchMapRendering.TextFormat
   alias CleanMixer.Project
 
-  # TODO test this
-
   @impl Mix.Task
   def run(_args, _options \\ []) do
     Config.load()

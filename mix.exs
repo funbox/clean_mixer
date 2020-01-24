@@ -40,10 +40,10 @@ defmodule CleanMixer.MixProject do
     [
       lint: ["dialyzer", "credo"],
       check: ["test", "lint"],
-      cover: ["coveralls --sort cov:desc --umbrella"],
+      cover: ["coveralls --sort cov:desc"],
       "cover.lint": ["coveralls.lint --missed-lines-threshold=2 --required-file-coverage=0.9"],
-      "cover.html": ["coveralls.html --umbrella"],
-      "cover.filter": ["coveralls.detail --umbrella --filter"]
+      "cover.html": ["coveralls.html"],
+      "cover.filter": ["coveralls.detail --filter"]
     ]
   end
 end

@@ -2,8 +2,6 @@ defmodule Mix.Tasks.CleanMixer.UI.ArchMapRendering.PlantUML do
   alias CleanMixer.ArchMap
   alias CleanMixer.ArchMap.Dependency
 
-  # TODO test this
-
   @spec render(ArchMap.t()) :: String.t()
   def render(%ArchMap{} = arch_map) do
     [
