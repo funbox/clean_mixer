@@ -33,6 +33,7 @@ defmodule CleanMixer.CodeMap do
 
       new_dependency(source_file, target, ref_types)
     end)
+    |> Enum.reject(&is_nil/1)
   end
 
   defp source_file_for(module_name, files) do

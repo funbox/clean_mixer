@@ -21,4 +21,7 @@ erl_crash.dump
 
 # Ignore package tarball (built via "mix hex.build").
 clean_mixer-*.tar
+clean_mixer.plantuml
+clean_mixer.png
+
 

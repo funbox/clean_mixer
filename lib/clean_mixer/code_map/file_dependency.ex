@@ -17,9 +17,4 @@ defmodule CleanMixer.CodeMap.FileDependency do
       ref_types: ref_types |> List.wrap() |> Enum.uniq()
     }
   end
-
-  defimpl String.Chars do
-    def to_string(dep),
-      do: "#{dep.source.path} -> #{dep.target.path} (#{dep.ref_types |> Enum.join(",")})"
-  end
 end
