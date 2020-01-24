@@ -18,15 +18,11 @@ defmodule CleanMixer.ArchMap.Component do
     %__MODULE__{name: name, files: files, file_dependencies: file_dependencies}
   end
 
-  # TODO test this
-
   @spec file_dependencies(t, t) :: list(FileDependency.t())
   def file_dependencies(component, other_component) do
     component.file_dependencies
     |> Enum.filter(&(&1.target in other_component.files))
   end
-
-  # TODO test this
 
   @spec child?(t, t) :: boolean
   def child?(child_component, parent_component) do
@@ -34,8 +30,6 @@ defmodule CleanMixer.ArchMap.Component do
     |> to_string()
     |> String.starts_with?([parent_component.name, @subcomponent_delimiter] |> Enum.join())
   end
-
-  # TODO test this
 
   @spec depth(t) :: pos_integer
   def depth(%__MODULE__{name: name}) do
