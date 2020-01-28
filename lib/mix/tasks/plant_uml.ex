@@ -14,6 +14,8 @@ defmodule Mix.Tasks.CleanMixer.PlantUml do
 
   @impl Mix.Task
   def run(_args, _options \\ []) do
+    Mix.Task.run("compile")
+
     Config.load()
     |> Project.new()
     |> get_arch_map()
