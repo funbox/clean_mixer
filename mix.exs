@@ -4,7 +4,7 @@ defmodule CleanMixer.MixProject do
   def project do
     [
       app: :clean_mixer,
-      version: "0.1.0",
+      version: "0.0.1",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -16,7 +16,9 @@ defmodule CleanMixer.MixProject do
         "cover.filter": :test,
         "cover.lint": :test
       ],
-      test_coverage: [tool: ExCoveralls]
+      test_coverage: [tool: ExCoveralls],
+      package: package(),
+      description: description()
     ]
   end
 
@@ -29,10 +31,27 @@ defmodule CleanMixer.MixProject do
   defp elixirc_paths(env) when env in [:test], do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
+  defp package do
+    [
+      name: :clean_mixer,
+      files: ["lib", "mix.exs", "README*", "LICENSE"],
+      maintainers: ["Miroslav Malkin"],
+      licenses: ["Apache 2.0"],
+      links: %{
+        "GitHub" => "https://github.com/miros/clean_mixer"
+      }
+    ]
+  end
+
+  defp description() do
+    "Tools for code architecture analysis and linting"
+  end
+
   defp deps do
     [
       {:dialyxir, "~> 1.0.0-rc.7", only: [:dev, :test], runtime: false},
-      {:excoveralls, "~> 0.11", only: :test}
+      {:excoveralls, "~> 0.11", only: :test},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end
 
