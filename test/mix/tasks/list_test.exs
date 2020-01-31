@@ -3,7 +3,7 @@ defmodule Mix.Tasks.CleanMixer.ListTest do
 
   import ExUnit.CaptureIO
 
-  test "it lists project components and their dependencies" do
+  test "lists project components and their dependencies" do
     output =
       capture_io(fn ->
         Mix.Task.run("clean_mixer.list")

@@ -57,7 +57,7 @@ defmodule CleanMixer.MixProject do
 
   defp aliases do
     [
-      lint: ["dialyzer", "credo"],
+      lint: ["dialyzer"],
       check: ["test", "lint"],
       cover: ["coveralls --sort cov:desc"],
       "cover.lint": ["coveralls.lint --missed-lines-threshold=2 --required-file-coverage=0.9"],

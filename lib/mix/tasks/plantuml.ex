@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.CleanMixer.PlantUml do
+defmodule Mix.Tasks.CleanMixer.Plantuml do
   use Mix.Task
 
   @shortdoc "Renders component dependencies with plantuml"

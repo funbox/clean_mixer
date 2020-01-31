@@ -11,7 +11,7 @@ defmodule CleanMixer.ArchMap.Dependency do
         }
 
   @spec new(Component.t(), Component.t(), list(FileDependency.t())) :: t
-  def new(source, target, file_deps) do
+  def new(source, target, file_deps \\ []) do
     %__MODULE__{
       source: source,
       target: target,

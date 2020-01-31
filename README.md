@@ -26,5 +26,12 @@ mix clean_mixer.list
 Render component dependencies with plantuml:
 
 ```
-mix clean_mixer.plant_uml
+mix clean_mixer.plantuml
 ```
+
+List cycles in component dependencies:
+
+```
+mix clean_mixer.cycles
+```
+
