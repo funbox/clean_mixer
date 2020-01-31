@@ -1,5 +1,5 @@
 defmodule CleanMixer do
-  alias Mix.Tasks.CleanMixer.Config
+  alias CleanMixer.Config
   alias CleanMixer.Project
   alias CleanMixer.ArchMap
   alias CleanMixer.ArchGraph

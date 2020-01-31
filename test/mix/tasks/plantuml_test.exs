@@ -7,6 +7,8 @@ defmodule Mix.Tasks.CleanMixer.PlantumlTest do
   setup do
     File.rm(Plantuml.image_file_name())
     File.rm(Plantuml.plantuml_file_name())
+
+    :ok
   end
 
   test "it generates plantuml components diagram" do
