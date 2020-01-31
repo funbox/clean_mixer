@@ -3,23 +3,13 @@ defmodule Mix.Tasks.CleanMixer.Cycles do
 
   @shortdoc "Lists all found cycles between components"
 
-  alias Mix.Tasks.CleanMixer.UI.Config
-  alias CleanMixer.Project
-  alias CleanMixer.ArchGraph
-
   @impl Mix.Task
   def run(_args, _options \\ []) do
     Mix.Task.run("compile")
 
-    Config.load()
-    |> Project.new()
-    |> get_arch_map()
-    |> ArchGraph.build_from()
-    |> ArchGraph.cycles()
+    CleanMixer.component_cycles()
     |> render_cycles()
   end
-
-  defp get_arch_map(%Project{arch_map: arch_map}), do: arch_map
 
   defp render_cycles([]) do
     IO.puts("No cycles found")

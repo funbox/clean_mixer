@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.CleanMixer.UI.Config do
+defmodule Mix.Tasks.CleanMixer.Config do
   alias CleanMixer.ArchConfig
 
   @default_name ".clean_mixer.exs"
