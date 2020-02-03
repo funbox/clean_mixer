@@ -7,7 +7,7 @@ defmodule Mix.Tasks.CleanMixer.UI.ArchMapRendering.TextFormat do
   @spec render(ArchMap.t()) :: String.t()
   def render(%ArchMap{} = arch_map) do
     arch_map.components
-    |> Enum.map(&{&1, ArchMap.dependencies_for(arch_map, &1)})
+    |> Enum.map(&{&1, ArchMap.dependencies_of(arch_map, &1)})
     |> with_dependencies()
     |> Enum.map_join("\n\n", &format_component/1)
   end

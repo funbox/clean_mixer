@@ -10,6 +10,12 @@ defmodule CleanMixer.ArchMap do
           dependencies: list(Dependency.t())
         }
 
+  defimpl Inspect do
+    def inspect(arch_map, opts) do
+      Inspect.Any.inspect(arch_map, %Inspect.Opts{opts | limit: 1})
+    end
+  end
+
   @spec new(list(Component.t())) :: t
   def new(components) do
     %__MODULE__{
@@ -18,8 +24,13 @@ defmodule CleanMixer.ArchMap do
     }
   end
 
-  @spec dependencies_for(t(), Component.t()) :: list(Dependency.t())
-  def dependencies_for(%__MODULE__{dependencies: deps}, %Component{} = component) do
+  @spec component(t, Component.name()) :: Component.t() | nil
+  def component(arch_map, name) do
+    arch_map.components |> Enum.find(&(&1.name == name))
+  end
+
+  @spec dependencies_of(t, Component.t()) :: list(Dependency.t())
+  def dependencies_of(%__MODULE__{dependencies: deps}, %Component{} = component) do
     Enum.filter(deps, &(&1.source == component))
   end
 

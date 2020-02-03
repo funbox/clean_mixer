@@ -20,11 +20,11 @@ defmodule CleanMixer.CodeMap do
 
   defp find_dependencies(files) do
     files
-    |> Enum.flat_map(&file_dependencies_for(&1, files))
+    |> Enum.flat_map(&file_dependencies_of(&1, files))
     |> Enum.uniq()
   end
 
-  defp file_dependencies_for(%SourceFile{references: refs} = source_file, files) do
+  defp file_dependencies_of(%SourceFile{references: refs} = source_file, files) do
     refs
     |> Enum.group_by(& &1.module_name)
     |> Enum.map(fn {module_name, refs} ->

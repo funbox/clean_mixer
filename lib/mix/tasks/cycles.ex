@@ -7,7 +7,8 @@ defmodule Mix.Tasks.CleanMixer.Cycles do
   def run(_args, _options \\ []) do
     Mix.Task.run("compile")
 
-    CleanMixer.component_cycles()
+    CleanMixer.arch_map()
+    |> CleanMixer.component_cycles()
     |> render_cycles()
   end
 
