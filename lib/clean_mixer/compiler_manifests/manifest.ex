@@ -6,10 +6,10 @@ defmodule CleanMixer.CompilerManifests.Manifest do
 
   require Mix.Compilers.Elixir, as: Compiler
 
-  @spec parse(list(term)) :: list(SourceFile.t())
-  def parse(items) do
-    modules = manifest_modules(items)
-    manifest_files(items, modules)
+  @spec parse({modules :: list(term), sources :: list(term)}) :: list(SourceFile.t())
+  def parse({module_items, source_items}) do
+    modules = manifest_modules(module_items)
+    manifest_files(source_items, modules)
   end
 
   defp manifest_modules(items) do
