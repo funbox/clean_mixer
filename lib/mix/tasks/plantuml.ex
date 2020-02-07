@@ -4,6 +4,7 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
   @shortdoc "Renders component dependencies with plantuml"
 
   alias Mix.Tasks.CleanMixer.UI.ArchMapRendering.PlantUML
+  alias CleanMixer.Metrics.MetricsMap
 
   @file_name "clean_mixer"
 
@@ -14,8 +15,10 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
   def run(_args, _options \\ []) do
     Mix.Task.run("compile")
 
-    CleanMixer.arch_map()
-    |> PlantUML.render()
+    arch_map = CleanMixer.arch_map()
+    metrics_map = MetricsMap.compute(arch_map)
+
+    PlantUML.render(arch_map, metrics_map)
     |> render_image(plantuml_file_name())
 
     Mix.Shell.IO.info("image file created at #{image_file_name()}")

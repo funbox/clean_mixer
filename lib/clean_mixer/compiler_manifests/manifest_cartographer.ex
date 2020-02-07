@@ -26,7 +26,7 @@ defmodule CleanMixer.CompilerManifests.ManifestCartographer do
 
   defp read_manifest(%App{manifest_path: manifest_path}) do
     manifest_path
-    |> Compiler.read_manifest("")
+    |> Compiler.read_manifest()
     |> Manifest.parse()
   end
 end

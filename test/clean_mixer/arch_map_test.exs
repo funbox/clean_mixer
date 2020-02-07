@@ -33,4 +33,27 @@ defmodule CleanMixer.ArchMapTest do
            ] ==
              ArchMap.new(components).dependencies
   end
+
+  describe "dependents_of" do
+    test "returns incoming dependencies for given component" do
+      comp1 = Component.new("comp1")
+      comp2 = Component.new("comp2")
+      comp3 = Component.new("comp3")
+
+      arch_map = %ArchMap{
+        components: [comp1, comp2, comp3],
+        dependencies: [
+          Dependency.new(comp1, comp3),
+          Dependency.new(comp2, comp3),
+          Dependency.new(comp3, comp1),
+          Dependency.new(comp3, comp2)
+        ]
+      }
+
+      assert ArchMap.incoming_dependencies_of(arch_map, comp3) == [
+               Dependency.new(comp1, comp3),
+               Dependency.new(comp2, comp3)
+             ]
+    end
+  end
 end
