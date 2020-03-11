@@ -1,6 +1,8 @@
 defmodule CleanMixer.ArchMap.Component do
   alias CleanMixer.CodeMap.SourceFile
   alias CleanMixer.CodeMap.FileDependency
+  alias CleanMixer.CodeMap.CodeModule
+
   @type name :: String.t() | atom
 
   defstruct [:name, :files, :file_dependencies]
@@ -37,6 +39,11 @@ defmodule CleanMixer.ArchMap.Component do
     |> to_string()
     |> trim(@subcomponent_delimiter)
     |> count_occurences(@subcomponent_delimiter)
+  end
+
+  @spec modules(t) :: list(CodeModule.t())
+  def modules(%__MODULE__{files: files}) do
+    Enum.flat_map(files, & &1.modules)
   end
 
   defp count_occurences(string, symbol) do
