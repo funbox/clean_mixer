@@ -4,7 +4,7 @@ defmodule CleanMixer.MixProject do
   def project do
     [
       app: :clean_mixer,
-      version: "0.0.3",
+      version: "0.0.4",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -62,7 +62,7 @@ defmodule CleanMixer.MixProject do
       cover: ["coveralls --sort cov:desc"],
       "cover.lint": ["coveralls.lint --missed-lines-threshold=2 --required-file-coverage=0.9"],
       "cover.html": ["coveralls.html"],
-      "cover.filter": ["coveralls.detail --filter"]
+      "cover.detail": ["coveralls.detail --filter"]
     ]
   end
 end

@@ -10,7 +10,7 @@ defmodule CleanMixer.CodeMap.FileDependency do
         }
 
   @spec new(SourceFile.t(), SourceFile.t(), ModuleReference.ref_type() | list(ModuleReference.ref_type())) :: t
-  def new(source, target, ref_types) do
+  def new(source, target, ref_types \\ [:runtime]) do
     %__MODULE__{
       source: source,
       target: target,
