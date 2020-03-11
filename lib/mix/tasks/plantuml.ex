@@ -5,6 +5,7 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
 
   alias Mix.Tasks.CleanMixer.UI.ArchMapRendering.PlantUML
   alias CleanMixer.Metrics.MetricsMap
+  alias CleanMixer.ArchMap
 
   @file_name "clean_mixer"
 
@@ -12,16 +13,50 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
   def image_file_name(), do: "#{@file_name}.png"
 
   @impl Mix.Task
-  def run(_args, _options \\ []) do
+  def run(args, _options \\ []) do
     Mix.Task.run("compile")
 
-    arch_map = CleanMixer.arch_map()
+    params = parse_params(args)
+
+    arch_map = CleanMixer.arch_map() |> skip_components(params[:except])
     metrics_map = MetricsMap.compute(arch_map)
 
     PlantUML.render(arch_map, metrics_map)
     |> render_image(plantuml_file_name())
 
     Mix.Shell.IO.info("image file created at #{image_file_name()}")
+  end
+
+  defp parse_params(args) do
+    parse_results =
+      cli_description()
+      |> Optimus.new!()
+      |> Optimus.parse!(args)
+
+    parse_results.options
+  end
+
+  defp cli_description do
+    [
+      name: "clean_mixer.plantuml",
+      description: "Generates plantuml component diagram",
+      parse_double_dash: true,
+      options: [
+        except: [
+          value_name: "EXCEPT",
+          long: "--except",
+          help: "Component names to skip (comma delimited)",
+          parser: fn s -> {:ok, String.split(s, ",")} end,
+          default: [],
+          required: false
+        ]
+      ]
+    ]
+  end
+
+  defp skip_components(arch_map, component_names) do
+    components_to_skip = component_names |> Enum.map(&ArchMap.component(arch_map, &1))
+    ArchMap.except(arch_map, components_to_skip)
   end
 
   defp render_image(uml_data, filename) do

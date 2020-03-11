@@ -39,6 +39,12 @@ defmodule CleanMixer.ArchMap do
     Enum.filter(deps, &(&1.target == component))
   end
 
+  @spec except(t, list(Component.t())) :: t
+  def except(arch_map, components) do
+    filtered_componens = arch_map.components -- components
+    new(filtered_componens)
+  end
+
   defp build_dependencies(components) do
     components
     |> Enum.flat_map(&build_deps_for(&1, components))
