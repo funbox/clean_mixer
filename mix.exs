@@ -49,6 +49,7 @@ defmodule CleanMixer.MixProject do
 
   defp deps do
     [
+      {:optimus, "~> 0.1.6"},
       {:dialyxir, "~> 1.0.0-rc.7", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.11", only: :test},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}

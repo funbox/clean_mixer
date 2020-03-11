@@ -10,25 +10,25 @@ defmodule CleanMixer.ArchMapTest do
     components = [
       comp1 =
         Component.new("comp1", [SourceFile.new("comp1/file1"), SourceFile.new("comp1/file2")], [
-          FileDependency.new(SourceFile.new("comp1/file1"), SourceFile.new("comp2/file1"), [:runtime]),
-          FileDependency.new(SourceFile.new("comp1/file2"), SourceFile.new("comp3/file1"), [:runtime])
+          FileDependency.new(SourceFile.new("comp1/file1"), SourceFile.new("comp2/file1")),
+          FileDependency.new(SourceFile.new("comp1/file2"), SourceFile.new("comp3/file1"))
         ]),
       comp2 =
         Component.new("comp2", [SourceFile.new("comp2/file1")], [
-          FileDependency.new(SourceFile.new("comp2/file1"), SourceFile.new("comp1/file1"), [:runtime])
+          FileDependency.new(SourceFile.new("comp2/file1"), SourceFile.new("comp1/file1"))
         ]),
       comp3 = Component.new("comp3", [SourceFile.new("comp3/file1")], [])
     ]
 
     assert [
              Dependency.new(comp1, comp3, [
-               FileDependency.new(SourceFile.new("comp1/file2"), SourceFile.new("comp3/file1"), [:runtime])
+               FileDependency.new(SourceFile.new("comp1/file2"), SourceFile.new("comp3/file1"))
              ]),
              Dependency.new(comp1, comp2, [
-               FileDependency.new(SourceFile.new("comp1/file1"), SourceFile.new("comp2/file1"), [:runtime])
+               FileDependency.new(SourceFile.new("comp1/file1"), SourceFile.new("comp2/file1"))
              ]),
              Dependency.new(comp2, comp1, [
-               FileDependency.new(SourceFile.new("comp2/file1"), SourceFile.new("comp1/file1"), [:runtime])
+               FileDependency.new(SourceFile.new("comp2/file1"), SourceFile.new("comp1/file1"))
              ])
            ] ==
              ArchMap.new(components).dependencies
@@ -54,6 +54,22 @@ defmodule CleanMixer.ArchMapTest do
                Dependency.new(comp1, comp3),
                Dependency.new(comp2, comp3)
              ]
+    end
+  end
+
+  describe "except" do
+    test "returns arch map without given components" do
+      components = [
+        comp1 =
+          Component.new("comp1", [SourceFile.new("comp1/file1"), SourceFile.new("comp1/file2")], [
+            FileDependency.new(SourceFile.new("comp1/file1"), SourceFile.new("comp2/file1"))
+          ]),
+        comp2 = Component.new("comp2", [SourceFile.new("comp2/file1")])
+      ]
+
+      filtered_map = components |> ArchMap.new() |> ArchMap.except([comp2])
+      assert filtered_map.components == [comp1]
+      assert filtered_map.dependencies == []
     end
   end
 end

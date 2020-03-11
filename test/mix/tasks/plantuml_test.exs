@@ -13,7 +13,7 @@ defmodule Mix.Tasks.CleanMixer.PlantumlTest do
 
   test "it generates plantuml components diagram" do
     capture_io(fn ->
-      Mix.Task.run("clean_mixer.plantuml")
+      Mix.Task.rerun("clean_mixer.plantuml")
     end)
 
     plant_uml = Plantuml.plantuml_file_name() |> File.read!()
@@ -21,5 +21,14 @@ defmodule Mix.Tasks.CleanMixer.PlantumlTest do
     assert plant_uml =~ "[compiler_manifests] --> [code_map]"
 
     assert File.exists?(Plantuml.image_file_name())
+  end
+
+  test "it can skip some components" do
+    capture_io(fn ->
+      Mix.Task.rerun("clean_mixer.plantuml", ["--except=compiler_manifests"])
+    end)
+
+    plant_uml = Plantuml.plantuml_file_name() |> File.read!()
+    refute plant_uml =~ "[compiler_manifests]"
   end
 end
