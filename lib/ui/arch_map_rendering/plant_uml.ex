@@ -7,6 +7,7 @@ defmodule Mix.Tasks.CleanMixer.UI.ArchMapRendering.PlantUML do
   alias CleanMixer.Metrics.ComponentMetrics.FanOut
   alias CleanMixer.Metrics.ComponentMetrics.Instability
   alias CleanMixer.Metrics.ComponentMetrics.Abstractness
+  alias CleanMixer.Metrics.ComponentMetrics.Distance
 
   @spec render(ArchMap.t(), MetricsMap.t()) :: String.t()
   def render(arch_map, metrics_map) do
@@ -23,7 +24,9 @@ defmodule Mix.Tasks.CleanMixer.UI.ArchMapRendering.PlantUML do
   end
 
   defp legend do
-    "Instability = out / (in + out)"
+    "I = Instability = out / (in + out) \n" <>
+      "A = Abstractness = behaviours / total_modules \n" <>
+      "D = Distance = |A+I-1|"
   end
 
   defp format_component(comp, metrics_map) do
@@ -35,10 +38,15 @@ defmodule Mix.Tasks.CleanMixer.UI.ArchMapRendering.PlantUML do
 
     fan_in = metrics[FanIn]
     fan_out = metrics[FanOut]
-    instability = metrics[Instability] |> Float.round(2)
-    abstractness = metrics[Abstractness] |> Float.round(2)
+    instability = metrics[Instability] |> format_metric()
+    abstractness = metrics[Abstractness] |> format_metric()
+    distance = metrics[Distance] |> format_metric()
 
-    "In=#{fan_in} Out=#{fan_out} I=#{instability} A=#{abstractness}"
+    "In=#{fan_in} Out=#{fan_out} I=#{instability} A=#{abstractness} D=#{distance}"
+  end
+
+  defp format_metric(value) do
+    Float.round(value, 2)
   end
 
   defp format_dependency(%Dependency{} = dep) do

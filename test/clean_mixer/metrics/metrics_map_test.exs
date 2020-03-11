@@ -13,6 +13,7 @@ defmodule CleanMixer.Metrics.MetricsMapTest do
   alias CleanMixer.Metrics.ComponentMetrics.FanOut
   alias CleanMixer.Metrics.ComponentMetrics.Instability
   alias CleanMixer.Metrics.ComponentMetrics.Abstractness
+  alias CleanMixer.Metrics.ComponentMetrics.Distance
 
   describe "compute" do
     test "computes metrics_map for arch_map" do
@@ -37,7 +38,8 @@ defmodule CleanMixer.Metrics.MetricsMapTest do
                FanIn => 0,
                FanOut => 1,
                Instability => 1,
-               Abstractness => 0.5
+               Abstractness => 0.5,
+               Distance => 0.5
              }
     end
   end
