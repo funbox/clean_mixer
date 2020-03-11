@@ -40,9 +40,12 @@ defmodule Mix.Tasks.CleanMixer.UI.ArchMapRendering.PlantUML do
     fan_out = metrics[FanOut]
     instability = metrics[Instability] |> format_metric()
     abstractness = metrics[Abstractness] |> format_metric()
-    distance = metrics[Distance] |> format_metric()
 
-    "In=#{fan_in} Out=#{fan_out} I=#{instability} A=#{abstractness} D=#{distance}"
+    distance = metrics[Distance] |> format_metric()
+    distance_deviation = MetricsMap.deviation(metrics_map, Distance)
+    distance_sigma = format_metric(distance / distance_deviation)
+
+    "In=#{fan_in} Out=#{fan_out} I=#{instability} A=#{abstractness} D=#{distance} (#{distance_sigma}σ)"
   end
 
   defp format_metric(value) do
