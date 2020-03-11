@@ -62,7 +62,7 @@ defmodule CleanMixer.MixProject do
       cover: ["coveralls --sort cov:desc"],
       "cover.lint": ["coveralls.lint --missed-lines-threshold=2 --required-file-coverage=0.9"],
       "cover.html": ["coveralls.html"],
-      "cover.filter": ["coveralls.detail --filter"]
+      "cover.detail": ["coveralls.detail --filter"]
     ]
   end
 end

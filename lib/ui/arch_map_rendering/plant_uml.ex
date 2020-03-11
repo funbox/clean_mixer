@@ -12,7 +12,7 @@ defmodule Mix.Tasks.CleanMixer.UI.ArchMapRendering.PlantUML do
     [
       "@startuml",
       "skinparam legend {\n FontSize 20\n }",
-      "legend bottom left\n Instability = out / (in + out)\n endlegend",
+      "legend bottom left\n #{legend()} \n endlegend",
       Enum.map(arch_map.components, &format_component(&1, metrics_map)),
       Enum.map(arch_map.dependencies, &format_dependency/1),
       "@enduml"
@@ -21,14 +21,22 @@ defmodule Mix.Tasks.CleanMixer.UI.ArchMapRendering.PlantUML do
     |> Enum.join("\n")
   end
 
+  defp legend do
+    "Instability = out / (in + out)"
+  end
+
   defp format_component(comp, metrics_map) do
+    "rectangle #{sanitize(comp.name)} [ =#{comp.name} \n\n #{component_desc(comp, metrics_map)} ]"
+  end
+
+  defp component_desc(comp, metrics_map) do
     metrics = MetricsMap.component_metrics(metrics_map, comp)
 
     fan_in = metrics[FanIn]
     fan_out = metrics[FanOut]
     instability = metrics[Instability] |> Float.round(2)
 
-    "rectangle #{sanitize(comp.name)} [ =#{comp.name} \n\n In=#{fan_in} Out=#{fan_out} I=#{instability} ]"
+    "In=#{fan_in} Out=#{fan_out} I=#{instability}"
   end
 
   defp format_dependency(%Dependency{} = dep) do
