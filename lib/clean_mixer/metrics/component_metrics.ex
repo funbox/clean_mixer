@@ -5,6 +5,7 @@ defmodule CleanMixer.Metrics.ComponentMetrics do
   alias CleanMixer.Metrics.ComponentMetrics.FanIn
   alias CleanMixer.Metrics.ComponentMetrics.FanOut
   alias CleanMixer.Metrics.ComponentMetrics.Instability
+  alias CleanMixer.Metrics.ComponentMetrics.Abstractness
 
   @type t :: map
   @type metric_name :: atom
@@ -18,7 +19,8 @@ defmodule CleanMixer.Metrics.ComponentMetrics do
     %{
       FanIn => fan_in,
       FanOut => fan_out,
-      Instability => Instability.compute(fan_in, fan_out)
+      Instability => Instability.compute(fan_in, fan_out),
+      Abstractness => Abstractness.compute(component)
     }
   end
 end
