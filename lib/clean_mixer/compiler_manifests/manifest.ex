@@ -14,7 +14,7 @@ defmodule CleanMixer.CompilerManifests.Manifest do
 
   defp manifest_modules(items) do
     for Compiler.module(sources: [path | _], module: name) <- items do
-      %CodeModule{name: name, path: path}
+      CodeModule.new(name, path)
     end
   end
 
