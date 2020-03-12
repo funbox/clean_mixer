@@ -43,4 +43,39 @@ defmodule CleanMixer.Metrics.MetricsMapTest do
              }
     end
   end
+
+  describe "mean" do
+    test "returns mean value of metric for all components" do
+      comp1 = Component.new("comp1")
+      comp2 = Component.new("comp2")
+
+      arch_map = %ArchMap{
+        components: [comp1, comp2],
+        dependencies: [
+          Dependency.new(comp1, comp2, [FileDependency.new("a", "b")])
+        ]
+      }
+
+      assert arch_map |> MetricsMap.compute() |> MetricsMap.mean(FanIn) == 0.5
+    end
+  end
+
+  describe "deviation" do
+    test "returns metric deviation and its sigmas count" do
+      comp1 = Component.new("comp1")
+      comp2 = Component.new("comp2")
+
+      arch_map = %ArchMap{
+        components: [comp1, comp2],
+        dependencies: [
+          Dependency.new(comp1, comp2, [FileDependency.new("a", "b")])
+        ]
+      }
+
+      metrics = MetricsMap.compute(arch_map)
+
+      assert MetricsMap.deviation(metrics, FanIn) > 0
+      assert MetricsMap.sigmas_count(metrics, FanIn, comp2) == 2
+    end
+  end
 end

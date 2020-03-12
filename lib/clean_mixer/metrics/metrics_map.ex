@@ -18,21 +18,22 @@ defmodule CleanMixer.Metrics.MetricsMap do
     Map.fetch!(metrics_map, comp)
   end
 
-  # @TODO test this
-
   @spec mean(t, ComponentMetrics.metric_name()) :: ComponentMetrics.metric_value()
   def mean(metrics_map, metric) do
     total = all_values(metrics_map, metric) |> Enum.sum()
     total / map_size(metrics_map)
   end
 
-  # @TODO test this
-
   @spec deviation(t, ComponentMetrics.metric_name()) :: ComponentMetrics.metric_value()
   def deviation(metrics_map, metric) do
     mean_val = mean(metrics_map, metric)
     diffs_sum = metrics_map |> all_values(metric) |> Enum.map(&Math.pow(&1 - mean_val, 2)) |> Enum.sum()
     Math.sqrt(diffs_sum / map_size(metrics_map))
+  end
+
+  @spec sigmas_count(t, ComponentMetrics.metric_name(), Component.t()) :: float
+  def sigmas_count(metrics_map, metric, component) do
+    component_metrics(metrics_map, component)[metric] / deviation(metrics_map, metric)
   end
 
   defp all_values(metrics_map, metric) do
