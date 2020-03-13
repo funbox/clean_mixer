@@ -18,4 +18,9 @@ defmodule CleanMixer.ArchMap.Dependency do
       files: file_deps
     }
   end
+
+  @spec components(t) :: [Component.t()]
+  def components(dep) do
+    [dep.source, dep.target]
+  end
 end

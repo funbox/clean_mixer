@@ -31,7 +31,7 @@ defmodule CleanMixer.ArchMapTest do
                FileDependency.new(SourceFile.new("comp2/file1"), SourceFile.new("comp1/file1"))
              ])
            ] ==
-             ArchMap.new(components).dependencies
+             ArchMap.build(components).dependencies
   end
 
   describe "dependents_of" do
@@ -67,7 +67,7 @@ defmodule CleanMixer.ArchMapTest do
         comp2 = Component.new("comp2", [SourceFile.new("comp2/file1")])
       ]
 
-      filtered_map = components |> ArchMap.new() |> ArchMap.except([comp2])
+      filtered_map = components |> ArchMap.build() |> ArchMap.except([comp2])
       assert filtered_map.components == [comp1]
       assert filtered_map.dependencies == []
     end

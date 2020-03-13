@@ -30,7 +30,7 @@ defmodule CleanMixer.Project do
   defp make_arch_map(component_map, code_map) do
     component_map
     |> Enum.map(&new_component(&1, code_map))
-    |> ArchMap.new()
+    |> ArchMap.build()
   end
 
   defp new_component({name, path}, code_map) do

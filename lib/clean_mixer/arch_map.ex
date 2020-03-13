@@ -16,12 +16,17 @@ defmodule CleanMixer.ArchMap do
     end
   end
 
-  @spec new(list(Component.t())) :: t
-  def new(components) do
+  @spec new(list(Component.t()), list(Dependency.t())) :: t
+  def new(components, dependencies) do
     %__MODULE__{
       components: components,
-      dependencies: build_dependencies(components)
+      dependencies: dependencies
     }
+  end
+
+  @spec build(list(Component.t())) :: t
+  def build(components) do
+    new(components, build_dependencies(components))
   end
 
   @spec component(t, Component.name()) :: Component.t() | nil
@@ -42,7 +47,7 @@ defmodule CleanMixer.ArchMap do
   @spec except(t, list(Component.t())) :: t
   def except(arch_map, components) do
     filtered_componens = arch_map.components -- components
-    new(filtered_componens)
+    build(filtered_componens)
   end
 
   defp build_dependencies(components) do
