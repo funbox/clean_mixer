@@ -6,6 +6,7 @@ defmodule Mix.Tasks.CleanMixer.UI.ArchMapRendering.PlantUML do
   alias CleanMixer.Metrics.ComponentMetrics.FanIn
   alias CleanMixer.Metrics.ComponentMetrics.FanOut
   alias CleanMixer.Metrics.ComponentMetrics.Instability
+  alias CleanMixer.Metrics.ComponentMetrics.Stability
   alias CleanMixer.Metrics.ComponentMetrics.Abstractness
   alias CleanMixer.Metrics.ComponentMetrics.Distance
 
@@ -25,6 +26,7 @@ defmodule Mix.Tasks.CleanMixer.UI.ArchMapRendering.PlantUML do
 
   defp legend do
     "I = Instability = out / (in + out) \n" <>
+      "S = Stability = 1 - I" <>
       "A = Abstractness = behaviours / total_modules \n" <>
       "D = Distance = |A+I-1|"
   end
@@ -39,12 +41,13 @@ defmodule Mix.Tasks.CleanMixer.UI.ArchMapRendering.PlantUML do
     fan_in = metrics[FanIn]
     fan_out = metrics[FanOut]
     instability = format_metric(metrics[Instability])
+    stability = format_metric(metrics[Stability])
     abstractness = format_metric(metrics[Abstractness])
 
     distance = format_metric(metrics[Distance])
     distance_sigmas = MetricsMap.sigmas_count(metrics_map, Distance, comp)
 
-    "In=#{fan_in} Out=#{fan_out} I=#{instability} A=#{abstractness} D=#{distance} (#{distance_sigmas}σ)"
+    "In=#{fan_in} Out=#{fan_out} I=#{instability} (S=#{stability}) A=#{abstractness} D=#{distance} (#{distance_sigmas}σ)"
   end
 
   defp format_metric(value) do
