@@ -26,7 +26,7 @@ defmodule Mix.Tasks.CleanMixer.UI.ArchMapRendering.PlantUML do
 
   defp legend do
     "I = Instability = out / (in + out) \n" <>
-      "S = Stability = 1 - I" <>
+      "S = Stability = 1 - I \n" <>
       "A = Abstractness = behaviours / total_modules \n" <>
       "D = Distance = |A+I-1|"
   end
@@ -45,9 +45,10 @@ defmodule Mix.Tasks.CleanMixer.UI.ArchMapRendering.PlantUML do
     abstractness = format_metric(metrics[Abstractness])
 
     distance = format_metric(metrics[Distance])
-    distance_sigmas = MetricsMap.sigmas_count(metrics_map, Distance, comp)
+    distance_sigmas = format_metric(MetricsMap.sigmas_count(metrics_map, Distance, comp))
 
-    "In=#{fan_in} Out=#{fan_out} I=#{instability} (S=#{stability}) A=#{abstractness} D=#{distance} (#{distance_sigmas}σ)"
+    "In=#{fan_in} Out=#{fan_out} I=#{instability} (S=#{stability}) \n" <>
+      "A=#{abstractness} D=#{distance} (#{distance_sigmas}σ)"
   end
 
   defp format_metric(value) do
