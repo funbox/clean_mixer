@@ -5,7 +5,7 @@ defmodule CleanMixer.MixProject do
     [
       app: :clean_mixer,
       version: "0.0.4",
-      elixir: "~> 1.9",
+      elixir: "~> 1.1",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       elixirc_paths: elixirc_paths(Mix.env()),
