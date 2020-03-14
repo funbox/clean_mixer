@@ -12,8 +12,6 @@ defmodule Mix.Tasks.CleanMixer.List do
 
     params = parse_params(args)
 
-    IO.inspect(params)
-
     CleanMixer.arch_map()
     |> filter_arch_map(params)
     |> TextFormat.render()

@@ -18,6 +18,11 @@ defmodule CleanMixer.Metrics.MetricsMap do
     Map.fetch!(metrics_map, comp)
   end
 
+  @spec component_metric(t, Component.t(), ComponentMetrics.metric_name()) :: ComponentMetrics.metric_value()
+  def component_metric(metrics_map, comp, metric) do
+    component_metrics(metrics_map, comp) |> Map.fetch!(metric)
+  end
+
   @spec mean(t, ComponentMetrics.metric_name()) :: ComponentMetrics.metric_value()
   def mean(metrics_map, metric) do
     total = all_values(metrics_map, metric) |> Enum.sum()

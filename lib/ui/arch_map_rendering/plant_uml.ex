@@ -17,7 +17,7 @@ defmodule Mix.Tasks.CleanMixer.UI.ArchMapRendering.PlantUML do
       "skinparam legend {\n FontSize 20\n }",
       "legend bottom left\n #{legend()} \n endlegend",
       Enum.map(arch_map.components, &format_component(&1, metrics_map)),
-      Enum.map(arch_map.dependencies, &format_dependency/1),
+      Enum.map(arch_map.dependencies, &format_dependency(&1, metrics_map)),
       "@enduml"
     ]
     |> List.flatten()
@@ -47,7 +47,7 @@ defmodule Mix.Tasks.CleanMixer.UI.ArchMapRendering.PlantUML do
     distance = format_metric(metrics[Distance])
     distance_sigmas = format_metric(MetricsMap.sigmas_count(metrics_map, Distance, comp))
 
-    "In=#{fan_in} Out=#{fan_out} I=#{instability} (S=#{stability}) \n" <>
+    "In=#{fan_in} Out=#{fan_out} S=#{stability} (I=#{instability}) \n" <>
       "A=#{abstractness} D=#{distance} (#{distance_sigmas}σ)"
   end
 
@@ -55,8 +55,19 @@ defmodule Mix.Tasks.CleanMixer.UI.ArchMapRendering.PlantUML do
     Float.round(value, 2)
   end
 
-  defp format_dependency(%Dependency{} = dep) do
-    "[#{sanitize(dep.source.name)}] --> [#{sanitize(dep.target.name)}]"
+  defp format_dependency(%Dependency{} = dep, metrics_map) do
+    "[#{sanitize(dep.source.name)}] -[#{link_style(dep, metrics_map)}]-> [#{sanitize(dep.target.name)}]"
+  end
+
+  defp link_style(%Dependency{} = dep, metrics_map) do
+    source_stability = MetricsMap.component_metric(metrics_map, dep.source, Stability)
+    target_stability = MetricsMap.component_metric(metrics_map, dep.target, Stability)
+
+    if source_stability < target_stability do
+      "#black"
+    else
+      "#red,bold"
+    end
   end
 
   defp sanitize(name) do

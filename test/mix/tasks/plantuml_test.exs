@@ -17,8 +17,8 @@ defmodule Mix.Tasks.CleanMixer.PlantumlTest do
     end)
 
     plant_uml = Plantuml.plantuml_file_name() |> File.read!()
-    assert plant_uml =~ "[arch_map] --> [code_map]"
-    assert plant_uml =~ "[compiler_manifests] --> [code_map]"
+    assert plant_uml =~ "[arch_map] -[#black]-> [code_map]"
+    assert plant_uml =~ "[compiler_manifests] -[#black]-> [code_map]"
 
     assert File.exists?(Plantuml.image_file_name())
   end
