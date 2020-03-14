@@ -52,14 +52,13 @@ defmodule CleanMixer.MixProject do
       {:optimus, "~> 0.1.6"},
       {:dialyxir, "~> 1.0.0-rc.7", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.11", only: :test},
+      {:excoveralls_linter, "~> 0.0.1", only: :test},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end
 
   defp aliases do
     [
-      lint: ["dialyzer"],
-      check: ["test", "lint"],
       cover: ["coveralls --sort cov:desc"],
       "cover.lint": ["coveralls.lint --missed-lines-threshold=2 --required-file-coverage=0.9"],
       "cover.html": ["coveralls.html"],

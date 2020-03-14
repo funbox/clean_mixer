@@ -1,0 +1,13 @@
+language: elixir
+matrix:
+  # https://github.com/elixir-lang/elixir/blob/master/lib/elixir/pages/Compatibility%20and%20Deprecations.md
+
+  - elixir: 1.1
+    otp_release: 22.0
+
+env:
+  - MIX_ENV=test COVERALLS_ELIXIR_VERSION=1.1 COVERALLS_OTP_RELEASE=22.0
+script:
+  - make ci
+after_script:
+  - ./coveralls.sh
