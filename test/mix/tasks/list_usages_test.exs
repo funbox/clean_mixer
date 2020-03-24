@@ -9,7 +9,7 @@ defmodule Mix.Tasks.CleanMixer.ListUsagesTest do
         Mix.Task.rerun("clean_mixer.list_usages", ["-v"])
       end)
 
-    assert output =~ "code_map <- (arch_map, compiler_manifests)"
+    assert output =~ "code_map <- [arch_map, compiler_manifests]"
 
     assert output =~
              Regex.compile!(

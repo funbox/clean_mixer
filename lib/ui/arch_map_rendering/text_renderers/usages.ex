@@ -20,7 +20,7 @@ defmodule CleanMixer.UI.ArchMapRendering.TextRenderes.Usages do
     usage_names = Enum.map(usages, & &1.source.name)
 
     lines = [
-      "===> #{name} <- (#{Enum.join(usage_names, ", ")})",
+      "===> #{name} <- [#{Enum.join(usage_names, ", ")}]",
       format_used_files(usages, options)
     ]
 
