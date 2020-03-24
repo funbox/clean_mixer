@@ -13,11 +13,13 @@ defmodule Mix.Tasks.CleanMixer.ListUsages do
 
   def extra_cli_desc() do
     [
+      name: "clean_mixer.list_usages",
+      description: "Lists public files of components and their usages",
       flags: [
         verbose: [
           value_name: "VERBOSE",
           short: "-v",
-          help: "prints more information",
+          help: "prints file usages",
           default: false,
           required: false
         ]

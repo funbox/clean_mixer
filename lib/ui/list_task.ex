@@ -51,8 +51,8 @@ defmodule CleanMixer.UI.ListTask do
 
   defp cli_description(extra_cli_desc) do
     [
-      name: "clean_mixer.list",
-      description: "Lists components and there dependencies",
+      name: extra_cli_desc[:name],
+      description: extra_cli_desc[:description],
       parse_double_dash: true,
       options:
         [

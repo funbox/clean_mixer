@@ -8,6 +8,13 @@ defmodule Mix.Tasks.CleanMixer.List do
 
   @impl Mix.Task
   def run(args, _options \\ []) do
-    ListTask.run(args, Dependencies)
+    ListTask.run(args, Dependencies, extra_cli_desc())
+  end
+
+  defp extra_cli_desc() do
+    [
+      name: "clean_mixer.list",
+      description: "Lists components and there dependencies"
+    ]
   end
 end
