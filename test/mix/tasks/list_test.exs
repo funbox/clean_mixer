@@ -22,4 +22,14 @@ defmodule Mix.Tasks.CleanMixer.ListTest do
     assert output =~ "arch_map -> code_map"
     refute output =~ "compiler_manifests -> code_map"
   end
+
+  test "filters components by file_source and file_target of deps" do
+    output =
+      capture_io(fn ->
+        Mix.Task.rerun("clean_mixer.list", ["--file-sources=*/component.ex", "--file-targets=*/code_module.ex"])
+      end)
+
+    assert output =~ "arch_map -> code_map"
+    refute output =~ "compiler_manifests -> code_map"
+  end
 end
