@@ -12,8 +12,13 @@ defmodule CleanMixer.ArchMap.Filter.Pattern do
     %__MODULE__{regexp: regexp}
   end
 
-  @spec match?(t, String.t()) :: boolean
-  def match?(%__MODULE__{regexp: regexp}, string) do
+  @spec any?(String.t(), list(t)) :: boolean
+  def any?(string, patterns) do
+    Enum.any?(patterns, &match_str?(&1, string))
+  end
+
+  @spec match_str?(t, String.t()) :: boolean
+  def match_str?(%__MODULE__{regexp: regexp}, string) do
     Regex.match?(regexp, string)
   end
 end

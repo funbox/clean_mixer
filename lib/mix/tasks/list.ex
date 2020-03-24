@@ -23,11 +23,19 @@ defmodule Mix.Tasks.CleanMixer.List do
   end
 
   defp filter({:sources, [_ | _] = sources}, arch_map) do
-    Filter.with_sources(arch_map, sources)
+    Filter.with_source_components(arch_map, sources)
   end
 
   defp filter({:targets, [_ | _] = targets}, arch_map) do
-    Filter.with_targets(arch_map, targets)
+    Filter.with_target_components(arch_map, targets)
+  end
+
+  defp filter({:file_sources, [_ | _] = sources}, arch_map) do
+    Filter.with_file_sources(arch_map, sources)
+  end
+
+  defp filter({:file_targets, [_ | _] = targets}, arch_map) do
+    Filter.with_file_targets(arch_map, targets)
   end
 
   defp filter(_, arch_map) do
@@ -54,7 +62,7 @@ defmodule Mix.Tasks.CleanMixer.List do
           short: "-s",
           long: "--sources",
           help: "filter by deps sources",
-          parser: fn s -> {:ok, String.split(s, ",")} end,
+          parser: &array/1,
           default: [],
           required: false
         ],
@@ -63,11 +71,31 @@ defmodule Mix.Tasks.CleanMixer.List do
           short: "-t",
           long: "--targets",
           help: "filter by deps targets",
-          parser: fn s -> {:ok, String.split(s, ",")} end,
+          parser: &array/1,
+          default: [],
+          required: false
+        ],
+        file_sources: [
+          value_name: "FILE_SOURCES",
+          long: "--file-sources",
+          help: "filter by deps file sources",
+          parser: &array/1,
+          default: [],
+          required: false
+        ],
+        file_targets: [
+          value_name: "FILE_TARGETS",
+          long: "--file-targets",
+          help: "filter by deps file targets",
+          parser: &array/1,
           default: [],
           required: false
         ]
       ]
     ]
+  end
+
+  defp array(string) do
+    {:ok, String.split(string, ",")}
   end
 end
