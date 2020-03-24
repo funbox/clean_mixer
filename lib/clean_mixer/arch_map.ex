@@ -39,6 +39,11 @@ defmodule CleanMixer.ArchMap do
     Enum.filter(deps, &(&1.source == component))
   end
 
+  @spec usages_of(t, Component.t()) :: list(Dependency.t())
+  def usages_of(%__MODULE__{dependencies: deps}, %Component{} = component) do
+    Enum.filter(deps, &(&1.target == component))
+  end
+
   @spec incoming_dependencies_of(t, Component.t()) :: list(Dependency.t())
   def incoming_dependencies_of(%__MODULE__{dependencies: deps}, %Component{} = component) do
     Enum.filter(deps, &(&1.target == component))

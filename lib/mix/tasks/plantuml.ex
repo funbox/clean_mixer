@@ -3,7 +3,7 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
 
   @shortdoc "Renders component dependencies with plantuml"
 
-  alias Mix.Tasks.CleanMixer.UI.ArchMapRendering.PlantUML
+  alias CleanMixer.UI.ArchMapRendering.PlantUML
   alias CleanMixer.Metrics.MetricsMap
   alias CleanMixer.ArchMap
 

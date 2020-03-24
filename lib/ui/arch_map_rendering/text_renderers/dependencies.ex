@@ -1,11 +1,14 @@
-defmodule Mix.Tasks.CleanMixer.UI.ArchMapRendering.TextFormat do
+defmodule CleanMixer.UI.ArchMapRendering.TextRenderes.Dependencies do
   alias CleanMixer.ArchMap
   alias CleanMixer.ArchMap.Component
   alias CleanMixer.ArchMap.Dependency
   alias CleanMixer.CodeMap.FileDependency
 
-  @spec render(ArchMap.t()) :: String.t()
-  def render(%ArchMap{} = arch_map) do
+  alias CleanMixer.UI.ArchMapRendering.TextRenderer
+  @behaviour TextRenderer
+
+  @impl TextRenderer
+  def render(%ArchMap{} = arch_map, _options \\ []) do
     arch_map.components
     |> Enum.map(&{&1, ArchMap.dependencies_of(arch_map, &1)})
     |> with_dependencies()

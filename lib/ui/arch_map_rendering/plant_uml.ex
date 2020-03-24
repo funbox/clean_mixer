@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.CleanMixer.UI.ArchMapRendering.PlantUML do
+defmodule CleanMixer.UI.ArchMapRendering.PlantUML do
   alias CleanMixer.ArchMap
   alias CleanMixer.ArchMap.Dependency
   alias CleanMixer.Metrics.MetricsMap
