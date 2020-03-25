@@ -1,6 +1,7 @@
 defmodule CleanMixer.ArchMap do
   alias CleanMixer.ArchMap.Component
   alias CleanMixer.ArchMap.Dependency
+  alias CleanMixer.CodeMap.SourceFile
 
   defstruct components: [],
             dependencies: []
@@ -44,9 +45,13 @@ defmodule CleanMixer.ArchMap do
     Enum.filter(deps, &(&1.target == component))
   end
 
-  @spec incoming_dependencies_of(t, Component.t()) :: list(Dependency.t())
-  def incoming_dependencies_of(%__MODULE__{dependencies: deps}, %Component{} = component) do
-    Enum.filter(deps, &(&1.target == component))
+  @spec public_files(t, Component.t()) :: list(SourceFile.t())
+  def public_files(%__MODULE__{} = arch_map, %Component{} = component) do
+    arch_map
+    |> usages_of(component)
+    |> Enum.flat_map(& &1.files)
+    |> Enum.map(& &1.target)
+    |> Enum.uniq()
   end
 
   @spec except(t, list(Component.t())) :: t

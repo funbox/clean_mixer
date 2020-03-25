@@ -15,6 +15,7 @@ defmodule CleanMixer.Metrics.MetricsMapTest do
   alias CleanMixer.Metrics.ComponentMetrics.Abstractness
   alias CleanMixer.Metrics.ComponentMetrics.Distance
   alias CleanMixer.Metrics.ComponentMetrics.Stability
+  alias CleanMixer.Metrics.ComponentMetrics.PublicFiles
 
   describe "compute" do
     test "computes metrics_map for arch_map" do
@@ -29,7 +30,9 @@ defmodule CleanMixer.Metrics.MetricsMapTest do
       arch_map = %ArchMap{
         components: [comp1, comp2],
         dependencies: [
-          Dependency.new(comp1, comp2, [FileDependency.new("a", "b")])
+          Dependency.new(comp1, comp2, [
+            FileDependency.new(SourceFile.new("a"), SourceFile.new("b"))
+          ])
         ]
       }
 
@@ -41,7 +44,8 @@ defmodule CleanMixer.Metrics.MetricsMapTest do
                Instability => 1,
                Stability => 0,
                Abstractness => 0.5,
-               Distance => 0.5
+               Distance => 0.5,
+               PublicFiles => 0
              }
     end
   end

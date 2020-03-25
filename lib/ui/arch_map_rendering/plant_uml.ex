@@ -9,6 +9,7 @@ defmodule CleanMixer.UI.ArchMapRendering.PlantUML do
   alias CleanMixer.Metrics.ComponentMetrics.Stability
   alias CleanMixer.Metrics.ComponentMetrics.Abstractness
   alias CleanMixer.Metrics.ComponentMetrics.Distance
+  alias CleanMixer.Metrics.ComponentMetrics.PublicFiles
 
   @spec render(ArchMap.t(), MetricsMap.t()) :: String.t()
   def render(arch_map, metrics_map) do
@@ -27,6 +28,7 @@ defmodule CleanMixer.UI.ArchMapRendering.PlantUML do
   defp legend do
     "I = Instability = out / (in + out) \n" <>
       "S = Stability = 1 - I \n" <>
+      "Pf = Public files \n" <>
       "A = Abstractness = behaviours / total_modules \n" <>
       "D = Distance = |A+I-1|"
   end
@@ -43,12 +45,13 @@ defmodule CleanMixer.UI.ArchMapRendering.PlantUML do
     instability = format_metric(metrics[Instability])
     stability = format_metric(metrics[Stability])
     abstractness = format_metric(metrics[Abstractness])
+    public_files = metrics[PublicFiles]
 
     distance = format_metric(metrics[Distance])
     distance_sigmas = format_metric(MetricsMap.sigmas_count(metrics_map, Distance, comp))
 
     "In=#{fan_in} Out=#{fan_out} S=#{stability} (I=#{instability}) \n" <>
-      "A=#{abstractness} D=#{distance} (#{distance_sigmas}σ)"
+      "Pf=#{public_files} A=#{abstractness} D=#{distance} (#{distance_sigmas}σ)"
   end
 
   defp format_metric(value) do

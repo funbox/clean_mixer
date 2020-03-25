@@ -8,6 +8,7 @@ defmodule CleanMixer.Metrics.ComponentMetrics do
   alias CleanMixer.Metrics.ComponentMetrics.Abstractness
   alias CleanMixer.Metrics.ComponentMetrics.Distance
   alias CleanMixer.Metrics.ComponentMetrics.Stability
+  alias CleanMixer.Metrics.ComponentMetrics.PublicFiles
 
   @type t :: map
   @type metric_name :: atom
@@ -27,7 +28,8 @@ defmodule CleanMixer.Metrics.ComponentMetrics do
       Instability => instability,
       Stability => Stability.compute(instability),
       Abstractness => abstractness,
-      Distance => Distance.compute(instability, abstractness)
+      Distance => Distance.compute(instability, abstractness),
+      PublicFiles => PublicFiles.compute(arch_map, component)
     }
   end
 end
