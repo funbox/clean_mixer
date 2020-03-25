@@ -19,9 +19,10 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
     params = parse_params(args)
 
     arch_map = CleanMixer.arch_map() |> skip_components(params[:except])
-    metrics_map = MetricsMap.compute(arch_map)
+    component_metrics = MetricsMap.compute_component_metrics(arch_map)
+    dependency_metrics = MetricsMap.compute_dep_metrics(arch_map, component_metrics)
 
-    PlantUML.render(arch_map, metrics_map)
+    PlantUML.render(arch_map, component_metrics, dependency_metrics)
     |> render_image(plantuml_file_name())
 
     Mix.Shell.IO.info("image file created at #{image_file_name()}")

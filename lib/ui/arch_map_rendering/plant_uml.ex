@@ -1,5 +1,6 @@
 defmodule CleanMixer.UI.ArchMapRendering.PlantUML do
   alias CleanMixer.ArchMap
+  alias CleanMixer.ArchMap.Component
   alias CleanMixer.ArchMap.Dependency
   alias CleanMixer.Metrics.MetricsMap
 
@@ -10,15 +11,16 @@ defmodule CleanMixer.UI.ArchMapRendering.PlantUML do
   alias CleanMixer.Metrics.ComponentMetrics.Abstractness
   alias CleanMixer.Metrics.ComponentMetrics.Distance
   alias CleanMixer.Metrics.ComponentMetrics.PublicFiles
+  alias CleanMixer.Metrics.DependencyMetrics.Usage
 
-  @spec render(ArchMap.t(), MetricsMap.t()) :: String.t()
-  def render(arch_map, metrics_map) do
+  @spec render(ArchMap.t(), MetricsMap.t(Component.t()), MetricsMap.t(Dependency.t())) :: String.t()
+  def render(arch_map, component_metrics, dependency_metrics) do
     [
       "@startuml",
       "skinparam legend {\n FontSize 20\n }",
       "legend bottom left\n #{legend()} \n endlegend",
-      Enum.map(arch_map.components, &format_component(&1, metrics_map)),
-      Enum.map(arch_map.dependencies, &format_dependency(&1, metrics_map)),
+      Enum.map(arch_map.components, &format_component(&1, component_metrics)),
+      Enum.map(arch_map.dependencies, &format_dependency(&1, component_metrics, dependency_metrics)),
       "@enduml"
     ]
     |> List.flatten()
@@ -30,7 +32,8 @@ defmodule CleanMixer.UI.ArchMapRendering.PlantUML do
       "S = Stability = 1 - I \n" <>
       "Pf = Public files \n" <>
       "A = Abstractness = behaviours / total_modules \n" <>
-      "D = Distance = |A+I-1|"
+      "D = Distance = |A+I-1| \n" <>
+      "U = Usage = UsedFiles / Pf"
   end
 
   defp format_component(comp, metrics_map) do
@@ -38,7 +41,7 @@ defmodule CleanMixer.UI.ArchMapRendering.PlantUML do
   end
 
   defp component_desc(comp, metrics_map) do
-    metrics = MetricsMap.component_metrics(metrics_map, comp)
+    metrics = MetricsMap.metrics_of(metrics_map, comp)
 
     fan_in = metrics[FanIn]
     fan_out = metrics[FanOut]
@@ -48,29 +51,32 @@ defmodule CleanMixer.UI.ArchMapRendering.PlantUML do
     public_files = metrics[PublicFiles]
 
     distance = format_metric(metrics[Distance])
-    distance_sigmas = format_metric(MetricsMap.sigmas_count(metrics_map, Distance, comp))
+    distance_sigmas = format_metric(MetricsMap.sigmas_count(metrics_map, comp, Distance))
 
     "In=#{fan_in} Out=#{fan_out} S=#{stability} (I=#{instability}) \n" <>
       "Pf=#{public_files} A=#{abstractness} D=#{distance} (#{distance_sigmas}σ)"
   end
 
-  defp format_metric(value) do
-    Float.round(value, 2)
+  defp format_dependency(%Dependency{} = dep, component_metrics, dependency_metrics) do
+    usage = dependency_metrics |> MetricsMap.metric(dep, Usage) |> format_metric()
+
+    "[#{sanitize(dep.source.name)}] -[#{link_style(dep, component_metrics)}]-> [#{sanitize(dep.target.name)}] : " <>
+      "U=#{usage}"
   end
 
-  defp format_dependency(%Dependency{} = dep, metrics_map) do
-    "[#{sanitize(dep.source.name)}] -[#{link_style(dep, metrics_map)}]-> [#{sanitize(dep.target.name)}]"
-  end
-
-  defp link_style(%Dependency{} = dep, metrics_map) do
-    source_stability = MetricsMap.component_metric(metrics_map, dep.source, Stability)
-    target_stability = MetricsMap.component_metric(metrics_map, dep.target, Stability)
+  defp link_style(%Dependency{} = dep, component_metrics) do
+    source_stability = MetricsMap.metric(component_metrics, dep.source, Stability)
+    target_stability = MetricsMap.metric(component_metrics, dep.target, Stability)
 
     if source_stability < target_stability do
       "#black"
     else
       "#red,bold"
     end
+  end
+
+  defp format_metric(value) do
+    Float.round(value, 2)
   end
 
   defp sanitize(name) do

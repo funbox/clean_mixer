@@ -16,9 +16,10 @@ defmodule CleanMixer.Metrics.MetricsMapTest do
   alias CleanMixer.Metrics.ComponentMetrics.Distance
   alias CleanMixer.Metrics.ComponentMetrics.Stability
   alias CleanMixer.Metrics.ComponentMetrics.PublicFiles
+  alias CleanMixer.Metrics.DependencyMetrics.Usage
 
-  describe "compute" do
-    test "computes metrics_map for arch_map" do
+  describe "compute_component_metrics" do
+    test "computes metrics_map for components in arch_map" do
       comp1 =
         Component.new("comp1", [
           SourceFile.new("any-path", [__MODULE__]),
@@ -36,9 +37,9 @@ defmodule CleanMixer.Metrics.MetricsMapTest do
         ]
       }
 
-      metrics = MetricsMap.compute(arch_map)
+      metrics = MetricsMap.compute_component_metrics(arch_map)
 
-      assert MetricsMap.component_metrics(metrics, comp1) == %{
+      assert MetricsMap.metrics_of(metrics, comp1) == %{
                FanIn => 0,
                FanOut => 1,
                Instability => 1,
@@ -46,6 +47,30 @@ defmodule CleanMixer.Metrics.MetricsMapTest do
                Abstractness => 0.5,
                Distance => 0.5,
                PublicFiles => 0
+             }
+    end
+  end
+
+  describe "compute_dep_metrics" do
+    test "computes metrics_map for dependencies in arch_map" do
+      comp1 = Component.new("comp1")
+      comp2 = Component.new("comp2")
+
+      dep1 =
+        Dependency.new(comp1, comp2, [
+          FileDependency.new(SourceFile.new("a"), SourceFile.new("b"))
+        ])
+
+      arch_map = %ArchMap{
+        components: [comp1, comp2],
+        dependencies: [dep1]
+      }
+
+      comp_metrics = MetricsMap.compute_component_metrics(arch_map)
+      metrics = MetricsMap.compute_dep_metrics(arch_map, comp_metrics)
+
+      assert MetricsMap.metrics_of(metrics, dep1) == %{
+               Usage => 1
              }
     end
   end
@@ -62,7 +87,7 @@ defmodule CleanMixer.Metrics.MetricsMapTest do
         ]
       }
 
-      assert arch_map |> MetricsMap.compute() |> MetricsMap.mean(FanIn) == 0.5
+      assert arch_map |> MetricsMap.compute_component_metrics() |> MetricsMap.mean(FanIn) == 0.5
     end
   end
 
@@ -78,10 +103,10 @@ defmodule CleanMixer.Metrics.MetricsMapTest do
         ]
       }
 
-      metrics = MetricsMap.compute(arch_map)
+      metrics = MetricsMap.compute_component_metrics(arch_map)
 
       assert MetricsMap.deviation(metrics, FanIn) > 0
-      assert MetricsMap.sigmas_count(metrics, FanIn, comp2) == 2
+      assert MetricsMap.sigmas_count(metrics, comp2, FanIn) == 2
     end
   end
 end

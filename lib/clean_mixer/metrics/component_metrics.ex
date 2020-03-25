@@ -10,11 +10,7 @@ defmodule CleanMixer.Metrics.ComponentMetrics do
   alias CleanMixer.Metrics.ComponentMetrics.Stability
   alias CleanMixer.Metrics.ComponentMetrics.PublicFiles
 
-  @type t :: map
-  @type metric_name :: atom
-  @type metric_value :: term
-
-  @spec compute(ArchMap.t(), Component.t()) :: t
+  @spec compute(ArchMap.t(), Component.t()) :: map
   def compute(arch_map, component) do
     fan_in = FanIn.compute(arch_map, component)
     fan_out = FanOut.compute(arch_map, component)
