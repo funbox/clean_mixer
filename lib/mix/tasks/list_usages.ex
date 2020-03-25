@@ -1,7 +1,7 @@
 defmodule Mix.Tasks.CleanMixer.ListUsages do
   use Mix.Task
 
-  @shortdoc "Lists all project component usages"
+  @shortdoc "Lists public files of components and their usages"
 
   alias CleanMixer.UI.ArchMapRendering.TextRenderes.Usages
   alias CleanMixer.UI.ListTask
@@ -14,7 +14,7 @@ defmodule Mix.Tasks.CleanMixer.ListUsages do
   def extra_cli_desc() do
     [
       name: "clean_mixer.list_usages",
-      description: "Lists public files of components and their usages",
+      description: @shortdoc,
       flags: [
         verbose: [
           value_name: "VERBOSE",
