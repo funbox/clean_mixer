@@ -16,6 +16,8 @@ defmodule CleanMixer.Metrics.MetricsMapTest do
   alias CleanMixer.Metrics.ComponentMetrics.Distance
   alias CleanMixer.Metrics.ComponentMetrics.Stability
   alias CleanMixer.Metrics.ComponentMetrics.PublicFiles
+  alias CleanMixer.Metrics.ComponentMetrics.AbstractIn
+  alias CleanMixer.Metrics.ComponentMetrics.AbstractOut
   alias CleanMixer.Metrics.DependencyMetrics.Usage
 
   describe "compute_component_metrics" do
@@ -46,7 +48,9 @@ defmodule CleanMixer.Metrics.MetricsMapTest do
                Stability => 0,
                Abstractness => 0.5,
                Distance => 0.5,
-               PublicFiles => 0
+               PublicFiles => 0,
+               AbstractIn => 0,
+               AbstractOut => 0
              }
     end
   end
@@ -83,7 +87,7 @@ defmodule CleanMixer.Metrics.MetricsMapTest do
       arch_map = %ArchMap{
         components: [comp1, comp2],
         dependencies: [
-          Dependency.new(comp1, comp2, [FileDependency.new("a", "b")])
+          Dependency.new(comp1, comp2, [FileDependency.new(SourceFile.new("a"), SourceFile.new("b"))])
         ]
       }
 
@@ -99,7 +103,7 @@ defmodule CleanMixer.Metrics.MetricsMapTest do
       arch_map = %ArchMap{
         components: [comp1, comp2],
         dependencies: [
-          Dependency.new(comp1, comp2, [FileDependency.new("a", "b")])
+          Dependency.new(comp1, comp2, [FileDependency.new(SourceFile.new("a"), SourceFile.new("b"))])
         ]
       }
 

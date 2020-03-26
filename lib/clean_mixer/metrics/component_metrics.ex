@@ -9,6 +9,8 @@ defmodule CleanMixer.Metrics.ComponentMetrics do
   alias CleanMixer.Metrics.ComponentMetrics.Distance
   alias CleanMixer.Metrics.ComponentMetrics.Stability
   alias CleanMixer.Metrics.ComponentMetrics.PublicFiles
+  alias CleanMixer.Metrics.ComponentMetrics.AbstractIn
+  alias CleanMixer.Metrics.ComponentMetrics.AbstractOut
 
   @spec compute(ArchMap.t(), Component.t()) :: map
   def compute(arch_map, component) do
@@ -25,7 +27,9 @@ defmodule CleanMixer.Metrics.ComponentMetrics do
       Stability => Stability.compute(instability),
       Abstractness => abstractness,
       Distance => Distance.compute(instability, abstractness),
-      PublicFiles => PublicFiles.compute(arch_map, component)
+      PublicFiles => PublicFiles.compute(arch_map, component),
+      AbstractIn => AbstractIn.compute(arch_map, component),
+      AbstractOut => AbstractOut.compute(arch_map, component)
     }
   end
 end

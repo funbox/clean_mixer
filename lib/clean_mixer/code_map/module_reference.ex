@@ -11,7 +11,7 @@ defmodule CleanMixer.CodeMap.ModuleReference do
         }
 
   @spec new(CodeModule.name(), ref_type) :: t
-  def new(module_name, type) do
+  def new(module_name, type \\ :runtime) do
     %__MODULE__{
       module_name: module_name,
       ref_type: type
