@@ -13,7 +13,7 @@ defmodule Mix.Tasks.CleanMixer.PlantumlTest do
 
   test "it generates plantuml components diagram" do
     capture_io(fn ->
-      Mix.Task.rerun("clean_mixer.plantuml")
+      Mix.Task.rerun("clean_mixer.plantuml", ["-v"])
     end)
 
     plant_uml = Plantuml.plantuml_file_name() |> File.read!()

@@ -1,11 +1,12 @@
 defmodule Mix.Tasks.CleanMixer.Plantuml do
   use Mix.Task
 
-  @shortdoc "Renders component dependencies with plantuml"
+  @shortdoc "Generates plantuml component diagram"
 
   alias CleanMixer.UI.ArchMapRendering.PlantUML
   alias CleanMixer.Metrics.MetricsMap
   alias CleanMixer.ArchMap
+  alias CleanMixer.UI.CLI
 
   @file_name "clean_mixer"
 
@@ -19,27 +20,23 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
     params = parse_params(args)
 
     arch_map = CleanMixer.arch_map() |> skip_components(params[:except])
-    metrics_map = MetricsMap.compute(arch_map)
+    component_metrics = MetricsMap.compute_component_metrics(arch_map)
+    dependency_metrics = MetricsMap.compute_dep_metrics(arch_map, component_metrics)
 
-    PlantUML.render(arch_map, metrics_map)
+    PlantUML.render(arch_map, component_metrics, dependency_metrics, params)
     |> render_image(plantuml_file_name())
 
     Mix.Shell.IO.info("image file created at #{image_file_name()}")
   end
 
   defp parse_params(args) do
-    parse_results =
-      cli_description()
-      |> Optimus.new!()
-      |> Optimus.parse!(args)
-
-    parse_results.options
+    CLI.parse_params(args, cli_description())
   end
 
   defp cli_description do
     [
       name: "clean_mixer.plantuml",
-      description: "Generates plantuml component diagram",
+      description: @shortdoc,
       parse_double_dash: true,
       options: [
         except: [
@@ -48,6 +45,15 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
           help: "Component names to skip (comma delimited)",
           parser: fn s -> {:ok, String.split(s, ",")} end,
           default: [],
+          required: false
+        ]
+      ],
+      flags: [
+        verbose: [
+          value_name: "VERBOSE",
+          short: "-v",
+          help: "prints links metrics",
+          default: false,
           required: false
         ]
       ]

@@ -1,7 +1,7 @@
 defmodule Mix.Tasks.CleanMixer.List do
   use Mix.Task
 
-  @shortdoc "Lists all project components and their deps"
+  @shortdoc "Lists all project components and their dependencies"
 
   alias CleanMixer.UI.ArchMapRendering.TextRenderes.Dependencies
   alias CleanMixer.UI.ListTask
@@ -14,7 +14,7 @@ defmodule Mix.Tasks.CleanMixer.List do
   defp extra_cli_desc() do
     [
       name: "clean_mixer.list",
-      description: "Lists components and there dependencies"
+      description: @shortdoc
     ]
   end
 end

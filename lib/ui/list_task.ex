@@ -1,6 +1,7 @@
 defmodule CleanMixer.UI.ListTask do
   alias CleanMixer.ArchMap.Filter
   alias CleanMixer.UI.ArchMapRendering.TextRenderer
+  alias CleanMixer.UI.CLI
 
   @spec run(list(String.t()), TextRenderer.t()) :: :ok
   def run(args, renderer, extra_cli_desc \\ []) do
@@ -41,12 +42,7 @@ defmodule CleanMixer.UI.ListTask do
   end
 
   defp parse_params(args, extra_cli_desc) do
-    parse_results =
-      cli_description(extra_cli_desc)
-      |> Optimus.new!()
-      |> Optimus.parse!(args)
-
-    Map.merge(parse_results.options, parse_results.flags)
+    CLI.parse_params(args, cli_description(extra_cli_desc))
   end
 
   defp cli_description(extra_cli_desc) do

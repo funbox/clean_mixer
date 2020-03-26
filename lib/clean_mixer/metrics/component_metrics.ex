@@ -8,12 +8,11 @@ defmodule CleanMixer.Metrics.ComponentMetrics do
   alias CleanMixer.Metrics.ComponentMetrics.Abstractness
   alias CleanMixer.Metrics.ComponentMetrics.Distance
   alias CleanMixer.Metrics.ComponentMetrics.Stability
+  alias CleanMixer.Metrics.ComponentMetrics.PublicFiles
+  alias CleanMixer.Metrics.ComponentMetrics.AbstractIn
+  alias CleanMixer.Metrics.ComponentMetrics.AbstractOut
 
-  @type t :: map
-  @type metric_name :: atom
-  @type metric_value :: term
-
-  @spec compute(ArchMap.t(), Component.t()) :: t
+  @spec compute(ArchMap.t(), Component.t()) :: map
   def compute(arch_map, component) do
     fan_in = FanIn.compute(arch_map, component)
     fan_out = FanOut.compute(arch_map, component)
@@ -27,7 +26,10 @@ defmodule CleanMixer.Metrics.ComponentMetrics do
       Instability => instability,
       Stability => Stability.compute(instability),
       Abstractness => abstractness,
-      Distance => Distance.compute(instability, abstractness)
+      Distance => Distance.compute(instability, abstractness),
+      PublicFiles => PublicFiles.compute(arch_map, component),
+      AbstractIn => AbstractIn.compute(arch_map, component),
+      AbstractOut => AbstractOut.compute(arch_map, component)
     }
   end
 end
