@@ -22,7 +22,7 @@ end
 
 Configure components of your codebase in `.clean_mixer.exs`
 
-```
+```elixir
 [
   components: [
     {"some-component", "lib/clean_mixer/path-to-files-of-some-component"},
