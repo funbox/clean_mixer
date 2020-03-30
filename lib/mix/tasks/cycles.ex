@@ -1,14 +1,16 @@
 defmodule Mix.Tasks.CleanMixer.Cycles do
   use Mix.Task
 
+  alias CleanMixer.Workspace
+
   @shortdoc "Lists all found cycles between components"
 
   @impl Mix.Task
   def run(_args, _options \\ []) do
     Mix.Task.run("compile")
 
-    CleanMixer.arch_map()
-    |> CleanMixer.component_cycles()
+    CleanMixer.new_workspace()
+    |> Workspace.component_cycles()
     |> render_cycles()
   end
 
