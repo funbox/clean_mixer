@@ -3,7 +3,7 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
 
   @shortdoc "Generates plantuml component diagram"
 
-  alias CleanMixer.UI.ArchMapRendering.PlantUML
+  alias CleanMixer.UI.ArchMapRendering.PlantUMLRenderer
   alias CleanMixer.Metrics.MetricsMap
   alias CleanMixer.ArchMap
   alias CleanMixer.UI.CLI
@@ -23,7 +23,7 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
     component_metrics = MetricsMap.compute_component_metrics(arch_map)
     dependency_metrics = MetricsMap.compute_dep_metrics(arch_map, component_metrics)
 
-    PlantUML.render(arch_map, component_metrics, dependency_metrics, params)
+    PlantUMLRenderer.render(arch_map, component_metrics, dependency_metrics, params)
     |> render_image(plantuml_file_name())
 
     Mix.Shell.IO.info("image file created at #{image_file_name()}")

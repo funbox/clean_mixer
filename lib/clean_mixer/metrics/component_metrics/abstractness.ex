@@ -10,7 +10,7 @@ defmodule CleanMixer.Metrics.ComponentMetrics.Abstractness do
     behaviours = comp |> Component.modules() |> Enum.filter(&CodeModule.behaviour?/1)
 
     case all_modules do
-      [] -> 0
+      [] -> 0.0
       [_ | _] -> Enum.count(behaviours) / Enum.count(all_modules)
     end
   end

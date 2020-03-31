@@ -1,4 +1,4 @@
-defmodule CleanMixer.UI.ArchMapRendering.PlantUML do
+defmodule CleanMixer.UI.ArchMapRendering.PlantUMLRenderer do
   alias CleanMixer.ArchMap
   alias CleanMixer.ArchMap.Component
   alias CleanMixer.ArchMap.Dependency
@@ -90,10 +90,10 @@ defmodule CleanMixer.UI.ArchMapRendering.PlantUML do
     source_stability = MetricsMap.metric(component_metrics, dep.source, Stability)
     target_stability = MetricsMap.metric(component_metrics, dep.target, Stability)
 
-    if source_stability < target_stability do
-      "#black"
-    else
+    if source_stability > target_stability do
       "#red,bold"
+    else
+      "#black"
     end
   end
 
