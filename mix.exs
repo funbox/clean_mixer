@@ -4,7 +4,7 @@ defmodule CleanMixer.MixProject do
   def project do
     [
       app: :clean_mixer,
-      version: "0.1.1",
+      version: "0.1.2",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -34,7 +34,7 @@ defmodule CleanMixer.MixProject do
   defp package do
     [
       name: :clean_mixer,
-      files: ["lib", "mix.exs", "README*", "LICENSE"],
+      files: ["lib", "priv", "mix.exs", "README*", "LICENSE"],
       maintainers: ["Miroslav Malkin"],
       licenses: ["Apache 2.0"],
       links: %{
