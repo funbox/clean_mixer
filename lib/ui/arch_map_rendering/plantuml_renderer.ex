@@ -103,6 +103,7 @@ defmodule CleanMixer.UI.ArchMapRendering.PlantUMLRenderer do
 
   defp sanitize(name) do
     name
+    |> String.replace(" ", "_")
     |> String.replace("/", "_")
     |> String.replace("-", "_")
   end

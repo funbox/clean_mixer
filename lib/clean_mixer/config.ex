@@ -13,8 +13,14 @@ defmodule CleanMixer.Config do
 
   defp parse(data) do
     # TODO raise a meaningfull exc
+
     {params, _} = Code.eval_string(data)
-    params |> Keyword.fetch!(:components) |> ArchConfig.new()
+    config = params |> Keyword.fetch!(:components) |> ArchConfig.new()
+
+    case ArchConfig.validate(config) do
+      :ok -> config
+      {:error, error} -> raise "error parsing #{@default_name} config; #{error}"
+    end
   end
 
   defp project_root do
