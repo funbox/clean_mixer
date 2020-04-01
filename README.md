@@ -68,7 +68,8 @@ For in depth description of metrics (in, out, I, A, D) and principles please ref
 * I = instability = out / (in + out)
 * A = files_with_behaviours / total_files
 * D = Distance = |A + I - 1| (Distance from the Main Sequence)
-* Pf = public files = files of current component used by others
+* Tf = total files = total number of files of current component
+* Pf = public files = number of files of current component used by others
 * Ain = Abstract in = number of incoming dependencies on current component behaviours
 * Aout = Abstract in = number of dependencies on other components behaviours
 * U = Usage = percent of current component files that are public (used by others)

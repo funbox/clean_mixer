@@ -33,9 +33,10 @@ defmodule CleanMixer.UI.ArchMapRendering.PlantUMLRenderer do
     main_legend = [
       "I = Instability = out / (in + out)",
       "S = Stability = 1 - I",
-      "Pf = Public files",
       "A = Abstractness = behaviours / total_modules",
       "D = Distance = |A+I-1|",
+      "Tf = Total files",
+      "Pf = Public files",
       "Ain = Abstract in",
       "Aout = Abstract out"
     ]
@@ -59,19 +60,21 @@ defmodule CleanMixer.UI.ArchMapRendering.PlantUMLRenderer do
 
     fan_in = metrics[FanIn]
     fan_out = metrics[FanOut]
-    instability = format_metric(metrics[Instability])
     stability = format_metric(metrics[Stability])
+    instability = format_metric(metrics[Instability])
+
     abstractness = format_metric(metrics[Abstractness])
+    distance = format_metric(metrics[Distance])
+    distance_sigmas = format_metric(MetricsMap.sigmas_count(metrics_map, comp, Distance))
+
+    total_files = Enum.count(comp.files)
     public_files = metrics[PublicFiles]
     abstract_in = metrics[AbstractIn]
     abstract_out = metrics[AbstractOut]
 
-    distance = format_metric(metrics[Distance])
-    distance_sigmas = format_metric(MetricsMap.sigmas_count(metrics_map, comp, Distance))
-
     "In=#{fan_in} Out=#{fan_out} S=#{stability} (I=#{instability}) \n" <>
-      "Pf=#{public_files} A=#{abstractness} D=#{distance} (#{distance_sigmas}σ) \n" <>
-      "Ain=#{abstract_in} Aout=#{abstract_out}"
+      "A=#{abstractness} D=#{distance} (#{distance_sigmas}σ) \n" <>
+      "Tf=#{total_files} Pf=#{public_files} Ain=#{abstract_in} Aout=#{abstract_out}"
   end
 
   defp format_dependency(%Dependency{} = dep, component_metrics, dependency_metrics, params) do
