@@ -55,7 +55,13 @@ defmodule CleanMixer.Metrics.MetricsMap do
 
   @spec sigmas_count(t, entity, metric_name()) :: float
   def sigmas_count(metrics_map, entity, metric) do
-    metric(metrics_map, entity, metric) / deviation(metrics_map, metric)
+    dev = deviation(metrics_map, metric)
+
+    if dev > 0 do
+      metric(metrics_map, entity, metric) / dev
+    else
+      0.0
+    end
   end
 
   defp all_values(metrics_map, metric) do
