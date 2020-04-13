@@ -55,6 +55,14 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
           help: "prints links metrics",
           default: false,
           required: false
+        ],
+        group: [
+          value_name: "GROUP",
+          long: "--group",
+          short: "-g",
+          help: "groups components by group tag",
+          default: false,
+          required: false
         ]
       ]
     ]

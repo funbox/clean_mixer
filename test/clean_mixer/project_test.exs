@@ -29,7 +29,10 @@ defmodule CleanMixer.ProjectTest do
   end
 
   test "build arch map from code map" do
-    component_map = [component1: "path1", component2: "path2"]
+    component_map = [
+      {"component1", "path1"},
+      {"component2", "path2", tag: "value"}
+    ]
 
     project =
       component_map
@@ -38,14 +41,15 @@ defmodule CleanMixer.ProjectTest do
 
     assert [
              Component.new(
-               :component1,
+               "component1",
                [SourceFile.new("path1/file1"), SourceFile.new("path1/file2")],
                [FileDependency.new(SourceFile.new("path1/file1"), SourceFile.new("path2/file1"), [:runtime])]
              ),
              Component.new(
-               :component2,
+               "component2",
                [SourceFile.new("path2/file1")],
-               [FileDependency.new(SourceFile.new("path2/file1"), SourceFile.new("path2/file2"), [:runtime])]
+               [FileDependency.new(SourceFile.new("path2/file1"), SourceFile.new("path2/file2"), [:runtime])],
+               tag: "value"
              )
            ] == project.arch_map.components
   end
