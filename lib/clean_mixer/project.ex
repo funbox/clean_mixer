@@ -33,9 +33,9 @@ defmodule CleanMixer.Project do
     |> ArchMap.build()
   end
 
-  defp new_component({name, path}, code_map) do
+  defp new_component(%{name: name, path: path, tags: tags}, code_map) do
     component_files = code_map.files |> Enum.filter(&String.starts_with?(&1.path, path))
     component_deps = code_map.dependencies |> Enum.filter(&(&1.source in component_files))
-    Component.new(name, component_files, component_deps)
+    Component.new(name, component_files, component_deps, tags)
   end
 end

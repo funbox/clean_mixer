@@ -27,7 +27,9 @@ Configure components of your codebase in `.clean_mixer.exs`
   components: [
     {"some-component", "lib/clean_mixer/path-to-files-of-some-component"},
     {"some-component/sub-component", "lib/clean_mixer/path-to-files-of-some-component/sub-component"},
-    {"some-umbrella-app-component", "apps/some-app/lib/some-app/path-to-files-of-some-component"}
+    {"some-umbrella-app-component", "apps/some-app/lib/some-app/path-to-files-of-some-component"},
+    {"some-grouped-component", "lib/clean_mixer/path-to-files-of-some-grouped-component", group:
+  "core_domain"},
   ]
 ]
 ```
@@ -35,6 +37,8 @@ Configure components of your codebase in `.clean_mixer.exs`
 Each component is just an arbitrary folder with code and name. You can model components as umbrella apps or just subfolders of lib directory.
 
 Note that components can be nested in each other, although architecturally it is not recommended and in some cases might yield confusing results.
+
+Components can have optional arbitrary tags. But the only currently used tag is `:group` which is used to optionally group components in plantuml diagram.
 
 ## Visualization and analysis
 
@@ -57,6 +61,9 @@ mix clean_mixer.plantuml --except="some-component,other-component"
 
 # render metrics of links beween components
 mix clean_mixer.plantuml -v
+
+# you can group components by :group tag
+mix clean_mixer.plantuml --group
 ```
 
 **Metrics provided:**

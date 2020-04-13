@@ -21,12 +21,33 @@ defmodule CleanMixer.UI.ArchMapRendering.PlantUMLRenderer do
       "@startuml",
       "skinparam legend {\n FontSize 20\n }",
       "legend bottom left\n #{legend(params)} \n endlegend",
-      Enum.map(arch_map.components, &format_component(&1, component_metrics)),
+      format_components(arch_map.components, group_tag(params), component_metrics),
       Enum.map(arch_map.dependencies, &format_dependency(&1, component_metrics, dependency_metrics, params)),
       "@enduml"
     ]
     |> List.flatten()
     |> Enum.join("\n")
+  end
+
+  defp group_tag(%{group: true}), do: :group
+  defp group_tag(_params), do: :group_tag_undefined
+
+  defp format_components(components, group_tag, component_metrics) do
+    components
+    |> Enum.group_by(& &1.tags[group_tag])
+    |> Enum.map(&format_component_group(&1, component_metrics))
+  end
+
+  defp format_component_group({_group_name = nil, components}, component_metrics) do
+    Enum.map(components, &format_component(&1, component_metrics))
+  end
+
+  defp format_component_group({group_name, components}, component_metrics) do
+    [
+      ~s(package "#{group_name}" {),
+      Enum.map(components, &format_component(&1, component_metrics)),
+      "}"
+    ]
   end
 
   defp legend(params) do

@@ -31,4 +31,13 @@ defmodule Mix.Tasks.CleanMixer.PlantumlTest do
     plant_uml = Plantuml.plantuml_file_name() |> File.read!()
     refute plant_uml =~ "[compiler_manifests]"
   end
+
+  test "it can group components" do
+    capture_io(fn ->
+      Mix.Task.rerun("clean_mixer.plantuml", ["--group"])
+    end)
+
+    plant_uml = Plantuml.plantuml_file_name() |> File.read!()
+    assert plant_uml =~ ~s(package "core_domain" {)
+  end
 end
