@@ -20,6 +20,8 @@ def deps do
 end
 ```
 
+To generate plantuml diagrams you need to have graphviz (https://graphviz.gitlab.io/) and jre installed.
+
 Configure components of your codebase in `.clean_mixer.exs`
 
 ```elixir
