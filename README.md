@@ -16,7 +16,7 @@ Add clean_mixer to your list of dependencies in mix.exs:
 
 ```elixir
 def deps do
-  [{:clean_mixer, "~> 0.1", only: [:dev, :test], runtime: false}]
+  [{:clean_mixer, "~> 0.2", only: [:dev, :test], runtime: false}]
 end
 ```
 
