@@ -7,7 +7,7 @@ defmodule CleanMixer.Metrics.ComponentMetrics.Abstractness do
   @spec compute(Component.t()) :: t
   def compute(comp) do
     all_modules = Component.modules(comp)
-    behaviours = comp |> Component.modules() |> Enum.filter(&CodeModule.behaviour?/1)
+    behaviours = comp |> Component.modules() |> Enum.filter(&CodeModule.abstract?/1)
 
     case all_modules do
       [] -> 0.0

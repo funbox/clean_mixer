@@ -31,6 +31,12 @@ defmodule CleanMixer.CodeMap.FileDependency do
 
   @spec abstract?(t) :: boolean
   def abstract?(%__MODULE__{} = dep) do
-    dep |> modules() |> Enum.any?(&CodeModule.behaviour?/1)
+    case modules(dep) do
+      [] ->
+        false
+
+      mods ->
+        Enum.all?(mods, &CodeModule.abstract?/1)
+    end
   end
 end
