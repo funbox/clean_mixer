@@ -38,6 +38,15 @@ defmodule CleanMixer.CodeMap.CodeModule do
   @spec has_functions?(name) :: boolean
   def has_functions?(module_name) do
     {:module, _} = Code.ensure_loaded(module_name)
-    module_name.__info__(:functions) != [] || module_name.__info__(:macros) != []
+    public_functions(module_name) != []
+  end
+
+  @spec public_functions(name) :: list()
+  def public_functions(module_name) do
+    if function_exported?(module_name, :__info__, 1) do
+      module_name.__info__(:functions) ++ module_name.__info__(:macros)
+    else
+      module_name.module_info(:functions) |> Enum.reject(&match?({:module_info, _}, &1))
+    end
   end
 end

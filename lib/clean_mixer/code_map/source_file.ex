@@ -24,4 +24,9 @@ defmodule CleanMixer.CodeMap.SourceFile do
   def prepend_path(file, new_parent_path) do
     %__MODULE__{file | path: Path.join(new_parent_path, file.path)}
   end
+
+  @spec erlang?(t) :: boolean
+  def erlang?(%__MODULE__{path: path}) do
+    String.ends_with?(path, ".erl")
+  end
 end

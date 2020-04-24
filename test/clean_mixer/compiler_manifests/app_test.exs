@@ -18,6 +18,7 @@ defmodule CleanMixer.CompilerManifests.AppTest do
       assert [
                %App{
                  path: "apps/some_umbrella_app",
+                 build_path: "apps/some_umbrella_app/build",
                  name: :some_umbrella_app,
                  manifest_path: "apps/some_umbrella_app/build/.mix/compile.elixir"
                }

@@ -31,5 +31,27 @@ defmodule CleanMixer.CompilerManifests.ManifestCartographerTest do
              module_name: CleanMixer.Tests.CodeFixtures.Doge,
              ref_type: :struct
            } in refs
+
+    assert %ModuleReference{
+             module_name: :old_doge,
+             ref_type: :runtime
+           } in refs
+  end
+
+  test "works with erlang code" do
+    assert %CodeMap{files: files} = ManifestCartographer.get_code_map()
+
+    old_doge_module = Enum.find(files, &(&1.path =~ "old_doge.erl"))
+
+    assert %SourceFile{
+             path: "test/support/code_fixtures/old_doge.erl",
+             modules: [:old_doge],
+             references: refs
+           } = old_doge_module
+
+    assert %ModuleReference{
+             module_name: CleanMixer.Tests.CodeFixtures.DogeOwner,
+             ref_type: :unknown
+           } in refs
   end
 end

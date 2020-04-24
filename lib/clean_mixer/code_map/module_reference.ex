@@ -1,7 +1,7 @@
 defmodule CleanMixer.CodeMap.ModuleReference do
   alias CleanMixer.CodeMap.CodeModule
 
-  @type ref_type :: :compile | :struct | :runtime
+  @type ref_type :: :compile | :struct | :runtime | :unknown
 
   defstruct [:module_name, :ref_type]
 
@@ -11,7 +11,7 @@ defmodule CleanMixer.CodeMap.ModuleReference do
         }
 
   @spec new(CodeModule.name(), ref_type) :: t
-  def new(module_name, type \\ :runtime) do
+  def new(module_name, type \\ :unknown) do
     %__MODULE__{
       module_name: module_name,
       ref_type: type

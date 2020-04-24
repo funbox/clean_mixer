@@ -40,5 +40,20 @@ defmodule CleanMixer.CodeMap.CodeModuleTest do
       assert CodeModule.has_functions?(ModuleWithFunctions)
       refute CodeModule.has_functions?(ModuleWithNoFunctions)
     end
+
+    test "works for erlang code" do
+      assert CodeModule.has_functions?(:old_doge)
+      refute CodeModule.has_functions?(:empty_module)
+    end
+  end
+
+  describe "public_functions" do
+    test "returns public functions for elixir modules" do
+      assert CodeModule.public_functions(ModuleWithFunctions) == [test_fun: 0, test_macro: 0]
+    end
+
+    test "returns exported functions for erlang modules" do
+      assert CodeModule.public_functions(:old_doge) == [say_hello: 0, ask_for_treat: 0]
+    end
   end
 end

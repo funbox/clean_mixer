@@ -4,11 +4,12 @@ defmodule CleanMixer.MixProject do
   def project do
     [
       app: :clean_mixer,
-      version: "0.3.0",
+      version: "0.4.0",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       elixirc_paths: elixirc_paths(Mix.env()),
+      erlc_paths: elixirc_paths(Mix.env()),
       aliases: aliases(),
       preferred_cli_env: [
         cover: :test,
