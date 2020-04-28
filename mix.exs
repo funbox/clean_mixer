@@ -20,12 +20,15 @@ defmodule CleanMixer.MixProject do
       test_coverage: [tool: ExCoveralls],
       package: package(),
       description: description()
+      # dialyzer: [
+      # plt_add_apps: [:ex_unit]
+      # ]
     ]
   end
 
   def application do
     [
-      extra_applications: [:logger, :mix]
+      extra_applications: [:logger, :mix, :tools]
     ]
   end
 
