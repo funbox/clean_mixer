@@ -2,7 +2,6 @@ defmodule CleanMixer.CompilerManifests.Manifest do
   alias CleanMixer.CodeMap.CodeModule
   alias CleanMixer.CodeMap.SourceFile
   alias CleanMixer.CodeMap.ModuleReference
-  alias CleanMixer.CodeMap.CodeModule
 
   require Mix.Compilers.Elixir, as: Compiler
 

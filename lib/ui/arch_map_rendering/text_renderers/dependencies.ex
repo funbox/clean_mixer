@@ -38,6 +38,12 @@ defmodule CleanMixer.UI.ArchMapRendering.TextRenderes.Dependencies do
   end
 
   defp format_file_dependency(%FileDependency{} = dep) do
-    [" |", "---> #{dep.target.path} (#{dep.ref_types |> Enum.join(",")})"]
+    [" |", "---> #{dep.target.path} ", format_ref_types(dep.ref_types)]
+  end
+
+  defp format_ref_types([:unknown]), do: ""
+
+  defp format_ref_types(ref_types) do
+    "(" <> Enum.join(ref_types, ",") <> ")"
   end
 end
