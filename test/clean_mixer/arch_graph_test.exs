@@ -41,4 +41,24 @@ defmodule CleanMixer.ArchGraphTest do
       assert [] == arch_map |> ArchGraph.build_from() |> ArchGraph.cycles() |> Enum.sort()
     end
   end
+
+  describe "uniq_cycles" do
+    test "leaves only cycles of uniq component sets" do
+      comp1 = Component.new("comp1")
+      comp2 = Component.new("comp2")
+      comp3 = Component.new("comp3")
+
+      arch_map = %ArchMap{
+        components: [comp1, comp2, comp3],
+        dependencies: [
+          Dependency.new(comp1, comp2),
+          Dependency.new(comp2, comp3),
+          Dependency.new(comp3, comp1)
+        ]
+      }
+
+      assert [[comp1, comp2, comp3, comp1]] ==
+               arch_map |> ArchGraph.build_from() |> ArchGraph.cycles() |> ArchGraph.uniq_cycles()
+    end
+  end
 end

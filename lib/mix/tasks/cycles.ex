@@ -2,6 +2,7 @@ defmodule Mix.Tasks.CleanMixer.Cycles do
   use Mix.Task
 
   alias CleanMixer.Workspace
+  alias CleanMixer.ArchGraph
 
   @shortdoc "Lists all found cycles between components"
 
@@ -11,6 +12,7 @@ defmodule Mix.Tasks.CleanMixer.Cycles do
 
     CleanMixer.new_workspace()
     |> Workspace.component_cycles()
+    |> ArchGraph.uniq_cycles()
     |> render_cycles()
   end
 

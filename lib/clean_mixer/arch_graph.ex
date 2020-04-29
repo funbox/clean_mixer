@@ -22,4 +22,9 @@ defmodule CleanMixer.ArchGraph do
     |> Enum.map(&:digraph.get_cycle(graph, &1))
     |> Enum.reject(&is_boolean/1)
   end
+
+  @spec uniq_cycles(cycle) :: list(cycle)
+  def uniq_cycles(cycles) do
+    Enum.uniq_by(cycles, fn components -> MapSet.new(components) end)
+  end
 end
