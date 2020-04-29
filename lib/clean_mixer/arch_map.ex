@@ -2,6 +2,7 @@ defmodule CleanMixer.ArchMap do
   alias CleanMixer.ArchMap.Component
   alias CleanMixer.ArchMap.Dependency
   alias CleanMixer.CodeMap.SourceFile
+  alias CleanMixer.Graph
 
   defstruct components: [],
             dependencies: []
@@ -35,6 +36,11 @@ defmodule CleanMixer.ArchMap do
     arch_map.components |> Enum.find(&(&1.name == name))
   end
 
+  @spec component_with_file(t, Path.t()) :: Component.t() | nil
+  def component_with_file(arch_map, path) do
+    arch_map.components |> Enum.find(&Component.has_file?(&1, path))
+  end
+
   @spec dependencies_of(t, Component.t()) :: list(Dependency.t())
   def dependencies_of(%__MODULE__{dependencies: deps}, %Component{} = component) do
     Enum.filter(deps, &(&1.source == component))
@@ -58,6 +64,16 @@ defmodule CleanMixer.ArchMap do
   def except(arch_map, components) do
     filtered_componens = arch_map.components -- components
     build(filtered_componens)
+  end
+
+  @spec graph(t()) :: Graph.t()
+  def graph(arch_map) do
+    graph = :digraph.new()
+
+    Enum.each(arch_map.components, &:digraph.add_vertex(graph, &1))
+    Enum.each(arch_map.dependencies, &:digraph.add_edge(graph, &1.source, &1.target))
+
+    graph
   end
 
   defp build_dependencies(components) do

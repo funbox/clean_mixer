@@ -9,21 +9,26 @@ defmodule CleanMixer.ArchMap.Component do
     :name,
     :files,
     :file_dependencies,
-    tags: []
+    meta: %{}
   ]
 
   @type t :: %__MODULE__{
           name: name,
           files: list(SourceFile.t()),
           file_dependencies: list(FileDependency.t()),
-          tags: keyword()
+          meta: map
         }
 
   @subcomponent_delimiter "/"
 
   @spec new(name, list(SourceFile.t()), list(FileDependency.t())) :: t
-  def new(name, files \\ [], file_dependencies \\ [], tags \\ []) do
-    %__MODULE__{name: name, files: files, file_dependencies: file_dependencies, tags: tags}
+  def new(name, files \\ [], file_dependencies \\ [], meta \\ %{}) do
+    %__MODULE__{
+      name: name,
+      files: files,
+      file_dependencies: file_dependencies,
+      meta: meta
+    }
   end
 
   @spec file_dependencies(t, t) :: list(FileDependency.t())
@@ -37,6 +42,11 @@ defmodule CleanMixer.ArchMap.Component do
     child_component.name
     |> to_string()
     |> String.starts_with?([parent_component.name, @subcomponent_delimiter] |> Enum.join())
+  end
+
+  @spec has_file?(t, Path.t()) :: boolean
+  def has_file?(component, path) do
+    path in Enum.map(component.files, & &1.path)
   end
 
   @spec depth(t) :: pos_integer

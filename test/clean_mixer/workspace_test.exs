@@ -3,8 +3,12 @@ defmodule CleanMixer.WorkspaceTest do
 
   alias CleanMixer.Workspace
   alias CleanMixer.ArchMap
+  alias CleanMixer.Project
   alias CleanMixer.ArchMap.Component
   alias CleanMixer.ArchMap.Dependency
+  alias CleanMixer.CodeMap
+  alias CleanMixer.CodeMap.SourceFile
+  alias CleanMixer.CodeMap.FileDependency
 
   describe "component" do
     test "returns dependencies of given component" do
@@ -15,8 +19,10 @@ defmodule CleanMixer.WorkspaceTest do
         components: [comp1, comp2]
       }
 
-      assert Workspace.new(arch_map) |> Workspace.component("comp1") == comp1
-      assert Workspace.new(arch_map) |> Workspace.component("comp2") == comp2
+      workspace = workspace_for(arch_map)
+
+      assert workspace |> Workspace.component("comp1") == comp1
+      assert workspace |> Workspace.component("comp2") == comp2
     end
   end
 
@@ -32,7 +38,7 @@ defmodule CleanMixer.WorkspaceTest do
         ]
       }
 
-      assert Workspace.new(arch_map) |> Workspace.dependencies_of("comp1") == [Dependency.new(comp1, comp2)]
+      assert workspace_for(arch_map) |> Workspace.dependencies_of("comp1") == [Dependency.new(comp1, comp2)]
     end
   end
 
@@ -48,7 +54,7 @@ defmodule CleanMixer.WorkspaceTest do
         ]
       }
 
-      assert Workspace.new(arch_map) |> Workspace.usages_of("comp2") == [Dependency.new(comp1, comp2)]
+      assert workspace_for(arch_map) |> Workspace.usages_of("comp2") == [Dependency.new(comp1, comp2)]
     end
   end
 
@@ -64,8 +70,41 @@ defmodule CleanMixer.WorkspaceTest do
         ]
       }
 
-      assert Workspace.new(arch_map) |> Workspace.dependency?("comp1", "comp2")
-      refute Workspace.new(arch_map) |> Workspace.dependency?("comp2", "comp1")
+      workspace = workspace_for(arch_map)
+
+      assert workspace |> Workspace.dependency?("comp1", "comp2")
+      refute workspace |> Workspace.dependency?("comp2", "comp1")
     end
+  end
+
+  describe "file_cycles" do
+    test "returns cycles in code map" do
+      files = [
+        SourceFile.new("file1"),
+        SourceFile.new("file2")
+      ]
+
+      dependencies = [
+        FileDependency.new(SourceFile.new("file1"), SourceFile.new("file2")),
+        FileDependency.new(SourceFile.new("file2"), SourceFile.new("file1"))
+      ]
+
+      code_map = %CodeMap{files: files, dependencies: dependencies}
+
+      cycles =
+        code_map
+        |> workspace_for()
+        |> Workspace.file_cycles()
+
+      assert [SourceFile.new("file1"), SourceFile.new("file2"), SourceFile.new("file1")] in cycles
+    end
+  end
+
+  def workspace_for(%ArchMap{} = arch_map) do
+    Workspace.new(%Project{arch_map: arch_map})
+  end
+
+  def workspace_for(%CodeMap{} = code_map) do
+    Workspace.new(%Project{code_map: code_map})
   end
 end

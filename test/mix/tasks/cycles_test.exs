@@ -6,7 +6,7 @@ defmodule Mix.Tasks.CleanMixer.CyclesTest do
   test "lists cycles in components dependencies" do
     output =
       capture_io(fn ->
-        Mix.Task.run("clean_mixer.cycles")
+        Mix.Task.run("clean_mixer.component_cycles")
       end)
 
     assert output =~ "No cycles found"
