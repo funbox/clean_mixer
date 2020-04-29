@@ -57,8 +57,7 @@ defmodule CleanMixer.ArchGraphTest do
         ]
       }
 
-      assert [[comp1, comp2, comp3, comp1]] ==
-               arch_map |> ArchGraph.build_from() |> ArchGraph.cycles() |> ArchGraph.uniq_cycles()
+      assert arch_map |> ArchGraph.build_from() |> ArchGraph.cycles() |> ArchGraph.uniq_cycles() |> Enum.count() == 1
     end
   end
 end
