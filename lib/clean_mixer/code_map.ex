@@ -1,6 +1,7 @@
 defmodule CleanMixer.CodeMap do
   alias CleanMixer.CodeMap.SourceFile
   alias CleanMixer.CodeMap.FileDependency
+  alias CleanMixer.Graph
 
   defstruct files: [],
             dependencies: []
@@ -16,6 +17,16 @@ defmodule CleanMixer.CodeMap do
       files: files,
       dependencies: find_dependencies(files)
     }
+  end
+
+  @spec graph(t()) :: Graph.t()
+  def graph(code_map) do
+    graph = :digraph.new()
+
+    Enum.each(code_map.files, &:digraph.add_vertex(graph, &1))
+    Enum.each(code_map.dependencies, &:digraph.add_edge(graph, &1.source, &1.target))
+
+    graph
   end
 
   defp find_dependencies(files) do

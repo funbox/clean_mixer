@@ -43,13 +43,14 @@ defmodule CleanMixer.ProjectTest do
              Component.new(
                "component1",
                [SourceFile.new("path1/file1"), SourceFile.new("path1/file2")],
-               [FileDependency.new(SourceFile.new("path1/file1"), SourceFile.new("path2/file1"), [:runtime])]
+               [FileDependency.new(SourceFile.new("path1/file1"), SourceFile.new("path2/file1"), [:runtime])],
+               %{tags: [], config_path: "path1"}
              ),
              Component.new(
                "component2",
                [SourceFile.new("path2/file1")],
                [FileDependency.new(SourceFile.new("path2/file1"), SourceFile.new("path2/file2"), [:runtime])],
-               tag: "value"
+               %{tags: [tag: "value"], config_path: "path2"}
              )
            ] == project.arch_map.components
   end
@@ -76,8 +77,14 @@ defmodule CleanMixer.ProjectTest do
       |> Project.new(CodeCartographer.new(NestedFakeCodeCartographer))
 
     assert [
-             Component.new(:component, [SourceFile.new("path/file"), SourceFile.new("path/subpath/file")]),
-             Component.new(:subcomponent, [SourceFile.new("path/subpath/file")])
+             Component.new(:component, [SourceFile.new("path/file"), SourceFile.new("path/subpath/file")], [], %{
+               tags: [],
+               config_path: "path"
+             }),
+             Component.new(:subcomponent, [SourceFile.new("path/subpath/file")], [], %{
+               tags: [],
+               config_path: "path/subpath"
+             })
            ] == project.arch_map.components
   end
 end

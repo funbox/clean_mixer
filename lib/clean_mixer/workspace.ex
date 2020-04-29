@@ -1,25 +1,28 @@
 defmodule CleanMixer.Workspace do
   use GenServer
 
+  alias CleanMixer.Project
   alias CleanMixer.ArchMap
   alias CleanMixer.ArchMap.Component
   alias CleanMixer.ArchMap.Dependency
-  alias CleanMixer.ArchGraph
+  alias CleanMixer.CodeMap
+  alias CleanMixer.CodeMap.SourceFile
+  alias CleanMixer.Graph
 
   @opaque t :: pid
-  @type arch_map_action :: (ArchMap.t() -> any)
+  @type project_action :: (Project.t() -> any)
 
-  @spec new(ArchMap.t()) :: t
-  def new(arch_map \\ CleanMixer.arch_map()) do
-    {:ok, pid} = GenServer.start_link(__MODULE__, [arch_map])
+  @spec new(Project.t()) :: t
+  def new(project) do
+    {:ok, pid} = GenServer.start_link(__MODULE__, [project])
     pid
   end
 
   @spec component(t, Component.name()) :: Component.t() | nil
   def component(workspace, name) do
     comp =
-      use_arch_map(workspace, fn arch_map ->
-        ArchMap.component(arch_map, name)
+      use_project(workspace, fn project ->
+        ArchMap.component(project.arch_map, name)
       end)
 
     unless comp do
@@ -29,12 +32,19 @@ defmodule CleanMixer.Workspace do
     comp
   end
 
+  @spec component_with_file(t, Path.t()) :: Component.t() | nil
+  def component_with_file(workspace, file_path) do
+    use_project(workspace, fn project ->
+      ArchMap.component_with_file(project.arch_map, file_path)
+    end)
+  end
+
   @spec dependencies_of(t, Component.name()) :: list(Dependency.t())
   def dependencies_of(workspace, comp_name) do
     comp = component(workspace, comp_name)
 
-    use_arch_map(workspace, fn arch_map ->
-      ArchMap.dependencies_of(arch_map, comp)
+    use_project(workspace, fn project ->
+      ArchMap.dependencies_of(project.arch_map, comp)
     end)
   end
 
@@ -42,8 +52,8 @@ defmodule CleanMixer.Workspace do
   def usages_of(workspace, comp_name) do
     comp = component(workspace, comp_name)
 
-    use_arch_map(workspace, fn arch_map ->
-      ArchMap.usages_of(arch_map, comp)
+    use_project(workspace, fn project ->
+      ArchMap.usages_of(project.arch_map, comp)
     end)
   end
 
@@ -55,40 +65,49 @@ defmodule CleanMixer.Workspace do
     target_comp in deps
   end
 
-  @spec component_cycles(t()) :: [ArchGraph.cycle()]
+  @spec component_cycles(t()) :: [Graph.cycle(Component.t())]
   def component_cycles(workspace) do
-    use_arch_map(workspace, fn arch_map ->
-      arch_map
-      |> ArchGraph.build_from()
-      |> ArchGraph.cycles()
+    use_project(workspace, fn project ->
+      project.arch_map
+      |> ArchMap.graph()
+      |> Graph.cycles()
     end)
   end
 
-  @spec use_arch_map(t, arch_map_action) :: action_result :: any
-  def use_arch_map(workspace, action_fun) do
-    GenServer.call(workspace, {:use_arch_map, action_fun})
+  @spec file_cycles(t()) :: [Graph.cycle(SourceFile.t())]
+  def file_cycles(workspace) do
+    use_project(workspace, fn project ->
+      project.code_map
+      |> CodeMap.graph()
+      |> Graph.cycles()
+    end)
+  end
+
+  @spec use_project(t, project_action) :: action_result :: any
+  def use_project(workspace, action_fun) do
+    GenServer.call(workspace, {:use_project, action_fun})
   end
 
   defmodule State do
-    defstruct [:arch_map]
+    defstruct [:project]
 
     @type t :: %__MODULE__{
-            arch_map: ArchMap.t()
+            project: Project.t()
           }
   end
 
   @impl GenServer
-  def init([arch_map]) do
+  def init([project]) do
     state = %State{
-      arch_map: arch_map
+      project: project
     }
 
     {:ok, state}
   end
 
   @impl GenServer
-  def handle_call({:use_arch_map, action}, _from, %State{arch_map: arch_map} = state) do
-    result = action.(arch_map)
+  def handle_call({:use_project, action}, _from, %State{project: project} = state) do
+    result = action.(project)
     {:reply, result, state}
   end
 end

@@ -34,7 +34,7 @@ defmodule CleanMixer.UI.ArchMapRendering.PlantUMLRenderer do
 
   defp format_components(components, group_tag, component_metrics) do
     components
-    |> Enum.group_by(& &1.tags[group_tag])
+    |> Enum.group_by(&get_in(&1.meta, [:tags, group_tag]))
     |> Enum.map(&format_component_group(&1, component_metrics))
   end
 

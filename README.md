@@ -118,7 +118,13 @@ mix clean_mixer.list_usages -v
 **List cycles in component dependencies:**
 
 ```
-mix clean_mixer.cycles
+mix clean_mixer.component_cycles
+```
+
+**List cycles in all files:**
+
+```
+mix clean_mixer.file_cycles
 ```
 
 ## Validation
