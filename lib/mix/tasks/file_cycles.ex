@@ -11,7 +11,7 @@ defmodule Mix.Tasks.CleanMixer.FileCycles do
   def run(_args, _options \\ []) do
     Mix.Task.run("compile")
 
-    workspace = CleanMixer.new_workspace()
+    workspace = CleanMixer.workspace()
 
     workspace
     |> Workspace.file_cycles()

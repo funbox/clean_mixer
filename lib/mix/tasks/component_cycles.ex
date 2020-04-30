@@ -10,7 +10,7 @@ defmodule Mix.Tasks.CleanMixer.ComponentCycles do
   def run(_args, _options \\ []) do
     Mix.Task.run("compile")
 
-    CleanMixer.new_workspace()
+    CleanMixer.workspace()
     |> Workspace.component_cycles()
     |> Graph.uniq_cycles()
     |> render_cycles()

@@ -140,7 +140,7 @@ defmodule ArchTest do
   alias CleanMixer.Workspace
 
   setup_all do
-    workspace = Workspace.new()
+    workspace = CleanMixer.workspace()
     %{ws: workspace}
   end
 

@@ -15,8 +15,8 @@ defmodule CleanMixer do
     project().arch_map
   end
 
-  @spec new_workspace() :: Workspace.t()
-  def new_workspace() do
+  @spec workspace() :: Workspace.t()
+  def workspace() do
     project() |> Workspace.new()
   end
 

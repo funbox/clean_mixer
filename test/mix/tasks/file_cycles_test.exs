@@ -10,6 +10,9 @@ defmodule Mix.Tasks.CleanMixer.FileCyclesTest do
       end)
 
     assert output =~
-             "test/support/code_fixtures/old_doge.erl -> test/support/code_fixtures/doge_owner.ex -> test/support/code_fixtures/old_doge.erl"
+             "test/support/code_fixtures/old_doge.erl -> test/support/code_fixtures/doge_owner.ex"
+
+    assert output =~
+             "test/support/code_fixtures/doge_owner.ex -> test/support/code_fixtures/old_doge.erl"
   end
 end

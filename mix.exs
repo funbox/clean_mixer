@@ -4,7 +4,7 @@ defmodule CleanMixer.MixProject do
   def project do
     [
       app: :clean_mixer,
-      version: "0.5.0",
+      version: "0.5.1",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -20,9 +20,6 @@ defmodule CleanMixer.MixProject do
       test_coverage: [tool: ExCoveralls],
       package: package(),
       description: description()
-      # dialyzer: [
-      # plt_add_apps: [:ex_unit]
-      # ]
     ]
   end
 
