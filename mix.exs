@@ -19,7 +19,8 @@ defmodule CleanMixer.MixProject do
       ],
       test_coverage: [tool: ExCoveralls],
       package: package(),
-      description: description()
+      description: description(),
+      dialyzer: dialyzer()
     ]
   end
 
@@ -65,5 +66,15 @@ defmodule CleanMixer.MixProject do
       "cover.html": ["coveralls.html"],
       "cover.detail": ["coveralls.detail --filter"]
     ]
+  end
+
+  defp dialyzer do
+    case System.get_env("DIALYZER_PLT_FILE") do
+      nil ->
+        []
+
+      file ->
+        [plt_file: {:no_warn, file}]
+    end
   end
 end
