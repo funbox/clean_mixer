@@ -6,8 +6,12 @@ matrix:
     otp_release: 22.2
 
 env:
-  - MIX_ENV=test COVERALLS_ELIXIR_VERSION=1.10 COVERALLS_OTP_RELEASE=22.2
+  - MIX_ENV=test COVERALLS_ELIXIR_VERSION=1.10 COVERALLS_OTP_RELEASE=22.2 DIALYZER_PLT_FILE=priv/plts/dialyzer.plt
 script:
   - make ci
 after_script:
   - ./coveralls.sh
+
+cache:
+  directories:
+    - priv/plts
