@@ -8,10 +8,11 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
   alias CleanMixer.ArchMap
   alias CleanMixer.UI.CLI
 
-  @file_name "clean_mixer"
+  @default_file_name "clean_mixer"
+  def default_file_name, do: @default_file_name
 
-  def plantuml_file_name(), do: "#{@file_name}.plantuml"
-  def image_file_name(), do: "#{@file_name}.png"
+  def plantuml_file_name(file_name \\ @default_file_name), do: "#{file_name}.plantuml"
+  def image_file_name(file_name \\ @default_file_name), do: "#{file_name}.png"
 
   @impl Mix.Task
   def run(args, _options \\ []) do
@@ -24,9 +25,9 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
     dependency_metrics = MetricsMap.compute_dep_metrics(arch_map, component_metrics)
 
     PlantUMLRenderer.render(arch_map, component_metrics, dependency_metrics, params)
-    |> render_image(plantuml_file_name())
+    |> render_image(plantuml_file_name(params[:output_file]))
 
-    Mix.Shell.IO.info("image file created at #{image_file_name()}")
+    Mix.Shell.IO.info("image file created at #{image_file_name(params[:output_file])}")
   end
 
   defp parse_params(args) do
@@ -45,6 +46,14 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
           help: "Component names to skip (comma delimited)",
           parser: fn s -> {:ok, String.split(s, ",")} end,
           default: [],
+          required: false
+        ],
+        output_file: [
+          value_name: "OUTPUT_FILE",
+          long: "--output-file",
+          short: "-o",
+          help: "Output file name.",
+          default: @default_file_name,
           required: false
         ]
       ],
