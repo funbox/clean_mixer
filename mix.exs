@@ -4,7 +4,7 @@ defmodule CleanMixer.MixProject do
   def project do
     [
       app: :clean_mixer,
-      version: "0.6.1",
+      version: "0.7.0",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -51,7 +51,7 @@ defmodule CleanMixer.MixProject do
 
   defp deps do
     [
-      {:optimus, "~> 0.1.6"},
+      {:optimus, "~> 0.1.11"},
       {:dialyxir, "~> 1.0.0-rc.7", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.11", only: :test},
       {:excoveralls_linter, "~> 0.0.1", only: :test},
