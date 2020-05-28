@@ -7,7 +7,11 @@ defmodule CleanMixer.ArchMap.Filter.Pattern do
 
   @spec new(String.t()) :: t
   def new(pattern) do
-    compiled_pattern = pattern |> Regex.escape() |> String.replace("\\*", ".+?")
+    compiled_pattern =
+      pattern
+      |> Regex.escape()
+      |> String.replace("\\*", ".*")
+
     regexp = Regex.compile!("\\A#{compiled_pattern}\\z")
     %__MODULE__{regexp: regexp}
   end

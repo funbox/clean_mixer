@@ -15,4 +15,12 @@ defmodule CleanMixer.ArchMap.Filter.PatternTest do
     assert Pattern.new("namespace/*/some-component") |> Pattern.match_str?("namespace/sub-ns/some-component")
     refute Pattern.new("namespace/*/some-component") |> Pattern.match_str?("namespace/sub-ns/other-component")
   end
+
+  test "globs match line start and end" do
+    assert Pattern.new("pattern*") |> Pattern.match_str?("pattern")
+    refute Pattern.new("pattern*") |> Pattern.match_str?("other")
+
+    assert Pattern.new("*pattern") |> Pattern.match_str?("pattern")
+    refute Pattern.new("*pattern") |> Pattern.match_str?("other")
+  end
 end
