@@ -1,4 +1,4 @@
-defmodule CleanMixer.GraphTest do
+defmodule CleanMixer.ArchGraphTest do
   use ExUnit.Case
 
   alias CleanMixer.Graph
