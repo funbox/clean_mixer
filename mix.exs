@@ -4,7 +4,7 @@ defmodule CleanMixer.MixProject do
   def project do
     [
       app: :clean_mixer,
-      version: "0.7.0",
+      version: "0.7.1",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -40,7 +40,7 @@ defmodule CleanMixer.MixProject do
       maintainers: ["Miroslav Malkin"],
       licenses: ["Apache 2.0"],
       links: %{
-        "GitHub" => "https://github.com/miros/clean_mixer"
+        "GitHub" => "https://github.com/funbox/clean_mixer"
       }
     ]
   end
