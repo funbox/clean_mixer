@@ -6,7 +6,7 @@ defmodule Mix.Tasks.CleanMixer.ListTest do
   test "lists project components and their dependencies" do
     output =
       capture_io(fn ->
-        Mix.Task.rerun("clean_mixer.list")
+        Mix.Task.rerun("clean_mixer.list", ["--include-deps"])
       end)
 
     assert output =~ "arch_map -> code_map"

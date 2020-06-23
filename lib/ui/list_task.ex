@@ -9,7 +9,7 @@ defmodule CleanMixer.UI.ListTask do
 
     params = parse_params(args, extra_cli_desc)
 
-    CleanMixer.arch_map()
+    CleanMixer.arch_map(include_deps: params[:include_deps])
     |> filter_arch_map(params)
     |> renderer.render(params)
     |> IO.puts()
@@ -87,7 +87,14 @@ defmodule CleanMixer.UI.ListTask do
             required: false
           ]
         ] ++ Keyword.get(extra_cli_desc, :options, []),
-      flags: Keyword.get(extra_cli_desc, :flags, [])
+      flags:
+        [
+          include_deps: [
+            value_name: "INCLUDE_DEPS",
+            long: "--include-deps",
+            help: "include mix dependencies"
+          ]
+        ] ++ Keyword.get(extra_cli_desc, :flags, [])
     ]
   end
 

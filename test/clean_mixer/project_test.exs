@@ -12,7 +12,7 @@ defmodule CleanMixer.ProjectTest do
   defmodule BasicFakeCartographer do
     @behaviour CodeCartographer
 
-    def get_code_map() do
+    def get_code_map(_options) do
       files = [
         SourceFile.new("path1/file1"),
         SourceFile.new("path1/file2"),
@@ -37,28 +37,27 @@ defmodule CleanMixer.ProjectTest do
     project =
       component_map
       |> ArchConfig.new()
-      |> Project.new(CodeCartographer.new(BasicFakeCartographer))
+      |> Project.new([], CodeCartographer.new(BasicFakeCartographer))
 
-    assert [
-             Component.new(
-               "component1",
-               [SourceFile.new("path1/file1"), SourceFile.new("path1/file2")],
-               [FileDependency.new(SourceFile.new("path1/file1"), SourceFile.new("path2/file1"), [:runtime])],
-               %{tags: [], config_path: "path1"}
-             ),
-             Component.new(
-               "component2",
-               [SourceFile.new("path2/file1")],
-               [FileDependency.new(SourceFile.new("path2/file1"), SourceFile.new("path2/file2"), [:runtime])],
-               %{tags: [tag: "value"], config_path: "path2"}
-             )
-           ] == project.arch_map.components
+    assert Component.new(
+             "component1",
+             [SourceFile.new("path1/file1"), SourceFile.new("path1/file2")],
+             [FileDependency.new(SourceFile.new("path1/file1"), SourceFile.new("path2/file1"), [:runtime])],
+             %{tags: [], config_path: "path1"}
+           ) in project.arch_map.components
+
+    assert Component.new(
+             "component2",
+             [SourceFile.new("path2/file1")],
+             [FileDependency.new(SourceFile.new("path2/file1"), SourceFile.new("path2/file2"), [:runtime])],
+             %{tags: [tag: "value"], config_path: "path2"}
+           ) in project.arch_map.components
   end
 
   defmodule NestedFakeCodeCartographer do
     @behaviour CodeCartographer
 
-    def get_code_map() do
+    def get_code_map(_options) do
       files = [
         SourceFile.new("path/file"),
         SourceFile.new("path/subpath/file")
@@ -74,17 +73,16 @@ defmodule CleanMixer.ProjectTest do
     project =
       component_map
       |> ArchConfig.new()
-      |> Project.new(CodeCartographer.new(NestedFakeCodeCartographer))
+      |> Project.new([], CodeCartographer.new(NestedFakeCodeCartographer))
 
-    assert [
-             Component.new(:component, [SourceFile.new("path/file"), SourceFile.new("path/subpath/file")], [], %{
-               tags: [],
-               config_path: "path"
-             }),
-             Component.new(:subcomponent, [SourceFile.new("path/subpath/file")], [], %{
-               tags: [],
-               config_path: "path/subpath"
-             })
-           ] == project.arch_map.components
+    assert Component.new(:component, [SourceFile.new("path/file"), SourceFile.new("path/subpath/file")], [], %{
+             tags: [],
+             config_path: "path"
+           }) in project.arch_map.components
+
+    assert Component.new(:subcomponent, [SourceFile.new("path/subpath/file")], [], %{
+             tags: [],
+             config_path: "path/subpath"
+           }) in project.arch_map.components
   end
 end

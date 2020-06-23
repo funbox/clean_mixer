@@ -3,16 +3,17 @@ defmodule CleanMixer do
   alias CleanMixer.Project
   alias CleanMixer.ArchMap
   alias CleanMixer.Workspace
+  alias CleanMixer.CodeCartographer
 
-  @spec project() :: Project.t()
-  def project() do
+  @spec project(CodeCartographer.options()) :: Project.t()
+  def project(options \\ []) do
     Config.load()
-    |> Project.new()
+    |> Project.new(options)
   end
 
-  @spec arch_map() :: ArchMap.t()
-  def arch_map() do
-    project().arch_map
+  @spec arch_map(CodeCartographer.options()) :: ArchMap.t()
+  def arch_map(options \\ []) do
+    project(options).arch_map
   end
 
   @spec workspace() :: Workspace.t()

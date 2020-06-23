@@ -20,7 +20,10 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
 
     params = parse_params(args)
 
-    arch_map = CleanMixer.arch_map() |> skip_components(params[:except])
+    arch_map =
+      CleanMixer.arch_map(include_deps: params[:include_deps])
+      |> skip_components(params[:except])
+
     component_metrics = MetricsMap.compute_component_metrics(arch_map)
     dependency_metrics = MetricsMap.compute_dep_metrics(arch_map, component_metrics)
 
@@ -72,6 +75,11 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
           help: "groups components by group tag",
           default: false,
           required: false
+        ],
+        include_deps: [
+          value_name: "INCLUDE_DEPS",
+          long: "--include-deps",
+          help: "include mix dependencies"
         ]
       ]
     ]
@@ -84,7 +92,7 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
 
   defp render_image(uml_data, filename) do
     File.write!(filename, uml_data)
-    Mix.Shell.IO.cmd("java -jar #{planutml_jar_path()} #{filename}")
+    Mix.Shell.IO.cmd("env PLANTUML_LIMIT_SIZE=16384 java -jar #{planutml_jar_path()} #{filename}")
   end
 
   defp planutml_jar_path() do

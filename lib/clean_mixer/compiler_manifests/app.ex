@@ -19,7 +19,7 @@ defmodule CleanMixer.CompilerManifests.App do
         path: opts[:path],
         build_path: opts[:build],
         name: app_name,
-        manifest_path: Path.join([opts[:build], ".mix", @manifest_filename])
+        manifest_path: manifest_path(opts[:build])
       }
     end
   end
@@ -32,5 +32,23 @@ defmodule CleanMixer.CompilerManifests.App do
       name: Mix.Project.config() |> Keyword.fetch!(:app),
       manifest_path: Mix.Project.manifest_path() |> Path.join(@manifest_filename)
     }
+  end
+
+  @spec current_deps() :: list(t)
+  def current_deps() do
+    deps = Mix.Dep.load_on_environment(env: Mix.env())
+
+    for %{app: app_name, opts: opts} <- deps, !opts[:from_umbrella] do
+      %__MODULE__{
+        path: opts[:dest] |> Path.relative_to(File.cwd!()),
+        build_path: opts[:build],
+        name: app_name,
+        manifest_path: manifest_path(opts[:build])
+      }
+    end
+  end
+
+  defp manifest_path(build_path) do
+    Path.join([build_path, ".mix", @manifest_filename])
   end
 end
