@@ -21,7 +21,7 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
     params = parse_params(args)
 
     arch_map =
-      CleanMixer.arch_map(include_deps: params[:include_deps])
+      CleanMixer.arch_map(include_hex: params[:include_hex])
       |> skip_components(params[:except])
 
     component_metrics = MetricsMap.compute_component_metrics(arch_map)
@@ -76,10 +76,10 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
           default: false,
           required: false
         ],
-        include_deps: [
-          value_name: "INCLUDE_DEPS",
-          long: "--include-deps",
-          help: "include mix dependencies"
+        include_hex: [
+          value_name: "INCLUDE_HEX",
+          long: "--include-hex",
+          help: "include hex dependencies"
         ]
       ]
     ]

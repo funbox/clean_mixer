@@ -3,7 +3,7 @@ defmodule CleanMixer.CodeCartographer do
 
   @type t :: {__MODULE__, module}
 
-  @type options :: [include_deps: boolean]
+  @type options :: [include_hex: boolean]
   @callback get_code_map(options) :: CodeMap.t()
 
   @spec new(module) :: t

@@ -19,12 +19,11 @@ defmodule CleanMixer.Project do
 
   @spec new(ArchConfig.t(), CodeCartographer.options()) :: t
   def new(config, options \\ [], {CodeCartographer, code_cartographer} \\ @default_cartographer) do
-    code_map = code_cartographer.get_code_map(options)
+      code_map = code_cartographer.get_code_map(options)
 
-    # TODO test this logic
     arch_map =
-      make_arch_map(config.component_map ++ mix_deps(), code_map)
-      |> filter_mix_deps()
+      make_arch_map(config.component_map ++ hex_packs(), code_map)
+      |> filter_hex_packs()
 
     %__MODULE__{
       code_map: code_map,
@@ -32,9 +31,9 @@ defmodule CleanMixer.Project do
     }
   end
 
-  defp mix_deps() do
+  defp hex_packs() do
     for app <- App.current_deps() do
-      %{name: to_string(app.name), path: app.path, tags: [dep: true]}
+      %{name: "hex/#{app.name}", path: app.path, tags: [hex_pack: true]}
     end
   end
 
@@ -52,18 +51,31 @@ defmodule CleanMixer.Project do
     Component.new(name, component_files, component_deps, meta)
   end
 
-  # TODO test this logic
-
-  defp filter_mix_deps(arch_map) do
-    dangling_mix_deps =
-      Enum.filter(arch_map.components, fn comp ->
-        Component.mix_dep?(comp) && !used_by_non_dep?(comp, arch_map)
-      end)
-
-    ArchMap.except(arch_map, dangling_mix_deps)
+  defp filter_hex_packs(arch_map) do
+    arch_map
+    |> filter_hex_components()
+    |> filter_hex_deps()
   end
 
-  defp used_by_non_dep?(comp, arch_map) do
-    ArchMap.usages_of(arch_map, comp) |> Enum.any?(&(!Component.mix_dep?(&1.source)))
+  defp filter_hex_components(arch_map) do
+    dangling_hex_packs =
+      Enum.filter(arch_map.components, fn comp ->
+        Component.hex_pack?(comp) && !used_by_non_hex?(comp, arch_map)
+      end)
+
+    ArchMap.except(arch_map, dangling_hex_packs)
+  end
+
+  defp used_by_non_hex?(comp, arch_map) do
+    ArchMap.usages_of(arch_map, comp) |> Enum.any?(&(!Component.hex_pack?(&1.source)))
+  end
+
+  defp filter_hex_deps(arch_map) do
+    new_deps =
+      Enum.reject(arch_map.dependencies, fn dep ->
+        Component.hex_pack?(dep.source) && Component.hex_pack?(dep.target)
+      end)
+
+    %ArchMap{arch_map | dependencies: new_deps}
   end
 end

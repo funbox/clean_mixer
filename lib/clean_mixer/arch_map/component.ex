@@ -31,9 +31,9 @@ defmodule CleanMixer.ArchMap.Component do
     }
   end
 
-  @spec mix_dep?(t) :: boolean()
-  def mix_dep?(component) do
-    !!get_in(component.meta, [:tags, :dep])
+  @spec hex_pack?(t) :: boolean()
+  def hex_pack?(component) do
+    !!get_in(component.meta, [:tags, :hex_pack])
   end
 
   @spec file_dependencies(t, t) :: list(FileDependency.t())

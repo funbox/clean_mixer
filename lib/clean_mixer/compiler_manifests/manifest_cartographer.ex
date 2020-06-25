@@ -18,7 +18,7 @@ defmodule CleanMixer.CompilerManifests.ManifestCartographer do
       |> MixProject.apps()
 
     apps =
-      if options[:include_deps] do
+      if options[:include_hex] do
         apps ++ App.current_deps()
       else
         apps
