@@ -43,8 +43,8 @@ defmodule CleanMixer.CompilerManifests.XrefSource do
   end
 
   def to_source_file({path, deps}) do
-    modules = Keyword.keys(deps) |> Enum.uniq()
-    references = Enum.map(deps, &to_reference/1)
+    modules = deps |> Keyword.keys() |> Enum.uniq()
+    references = deps |> Enum.map(&to_reference/1) |> Enum.uniq()
 
     SourceFile.new(path, modules, references)
   end

@@ -61,6 +61,9 @@ mix clean_mixer.plantuml --help
 # you can hide some components from diagramm
 mix clean_mixer.plantuml --except="some-component,other-component"
 
+# also render hex depencies of your components
+mix clean_mixer.plantuml --include-hex
+
 # render metrics of links beween components
 mix clean_mixer.plantuml -v
 
@@ -91,6 +94,9 @@ Component links are coloured red on a diagramm if the Stable Dependencies Princi
 mix clean_mixer.list
 
 mix clean_mixer.list --help
+
+# you can include hex depencies of your components
+mix clean_mixer.list --include-hex
 
 # you can filter list by source and target components
 mix clean_mixer.list --sources="some/component" --targets="other/component"

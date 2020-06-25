@@ -15,6 +15,16 @@ defmodule CleanMixer.CodeMap.SourceFile do
     %__MODULE__{path: path, modules: modules, references: refs}
   end
 
+  @spec merge_references(t, list(ModuleReference.t())) :: t
+  def merge_references(source_file, references) do
+    new_references =
+      Enum.reject(references, fn new_ref ->
+        Enum.find(source_file.references, &(&1.module_name == new_ref.module_name))
+      end)
+
+    %{source_file | references: source_file.references ++ new_references}
+  end
+
   @spec has_module?(t, CodeModule.name()) :: boolean
   def has_module?(%__MODULE__{modules: modules}, name) do
     name in modules

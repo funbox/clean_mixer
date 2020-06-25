@@ -9,24 +9,40 @@ defmodule CleanMixer.CompilerManifests.ManifestCartographer do
   alias CleanMixer.CodeMap
   alias CleanMixer.CompilerManifests.XrefSource
   alias Mix.Compilers.Elixir, as: Compiler
+  alias CleanMixer.CompilerManifests.App
 
   @impl CodeCartographer
-  def get_code_map() do
+  def get_code_map(options \\ []) do
     apps =
       MixProject.current()
       |> MixProject.apps()
 
-    elixir_files =
+    apps =
+      if options[:include_hex] do
+        apps ++ App.current_deps()
+      else
+        apps
+      end
+
+    elixir_manifests =
       apps
       |> Enum.map(&app_manifest_files/1)
       |> List.flatten()
 
-    erlang_files =
-      apps
-      |> XrefSource.get()
-      |> Enum.filter(&SourceFile.erlang?/1)
+    elixir_manifests
+    |> merge(XrefSource.get(apps))
+    |> CodeMap.new()
+  end
 
-    CodeMap.new(elixir_files ++ erlang_files)
+  defp merge(source_files, other_files) do
+    Map.merge(to_map(source_files), to_map(other_files), fn _k, file1, file2 ->
+      SourceFile.merge_references(file1, file2.references)
+    end)
+    |> Map.values()
+  end
+
+  defp to_map(source_files) do
+    source_files |> Enum.map(&{&1.path, &1}) |> Enum.into(%{})
   end
 
   defp app_manifest_files(%App{path: app_path} = app) do

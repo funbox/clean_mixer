@@ -31,6 +31,11 @@ defmodule CleanMixer.ArchMap.Component do
     }
   end
 
+  @spec hex_pack?(t) :: boolean()
+  def hex_pack?(component) do
+    !!get_in(component.meta, [:tags, :hex_pack])
+  end
+
   @spec file_dependencies(t, t) :: list(FileDependency.t())
   def file_dependencies(component, other_component) do
     component.file_dependencies

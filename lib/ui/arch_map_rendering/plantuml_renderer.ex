@@ -19,6 +19,7 @@ defmodule CleanMixer.UI.ArchMapRendering.PlantUMLRenderer do
   def render(arch_map, component_metrics, dependency_metrics, params) do
     [
       "@startuml",
+      "skinparam backgroundColor<<dep>> Grey",
       "skinparam legend {\n FontSize 20\n }",
       "legend bottom left\n #{legend(params)} \n endlegend",
       format_components(arch_map.components, group_tag(params), component_metrics),
@@ -73,7 +74,15 @@ defmodule CleanMixer.UI.ArchMapRendering.PlantUMLRenderer do
   end
 
   defp format_component(comp, metrics_map) do
-    "rectangle #{sanitize(comp.name)} [ =#{comp.name} \n\n #{component_desc(comp, metrics_map)} ]"
+    "rectangle #{sanitize(comp.name)} #{colour(comp)} [ =#{comp.name} \n\n #{component_desc(comp, metrics_map)} ]"
+  end
+
+  defp colour(comp) do
+    if get_in(comp.meta, [:tags, :dep]) do
+      "#LightGrey"
+    else
+      ""
+    end
   end
 
   defp component_desc(comp, metrics_map) do

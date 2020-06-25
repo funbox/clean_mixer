@@ -23,10 +23,14 @@ defmodule CleanMixer.UI.ArchMapRendering.TextRenderes.Dependencies do
 
   defp format_component_dependency(%Dependency{} = dep) do
     [
-      "===> #{dep.source.name} -> #{dep.target.name}",
+      "===> #{render_comp(dep.source)} -> #{render_comp(dep.target)}",
       "\n",
       dep.files |> Enum.group_by(& &1.source) |> Enum.map_join("\n", &format_file_dependencies/1)
     ]
+  end
+
+  defp render_comp(comp) do
+    comp.name
   end
 
   defp format_file_dependencies({source_file, deps}) do
