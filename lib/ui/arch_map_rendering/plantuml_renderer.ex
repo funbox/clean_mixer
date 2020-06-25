@@ -78,7 +78,7 @@ defmodule CleanMixer.UI.ArchMapRendering.PlantUMLRenderer do
   end
 
   defp colour(comp) do
-    if get_in(comp.meta, [:tags, :dep]) do
+    if Component.hex_pack?(comp) do
       "#LightGrey"
     else
       ""
