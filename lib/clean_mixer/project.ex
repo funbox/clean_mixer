@@ -19,7 +19,7 @@ defmodule CleanMixer.Project do
 
   @spec new(ArchConfig.t(), CodeCartographer.options()) :: t
   def new(config, options \\ [], {CodeCartographer, code_cartographer} \\ @default_cartographer) do
-      code_map = code_cartographer.get_code_map(options)
+    code_map = code_cartographer.get_code_map(options)
 
     arch_map =
       make_arch_map(config.component_map ++ hex_packs(), code_map)
