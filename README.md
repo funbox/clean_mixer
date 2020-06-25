@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.com/miros/clean_mixer.svg?branch=master)](https://travis-ci.com/miros/clean_mixer)
-[![Coverage Status](https://coveralls.io/repos/github/miros/clean_mixer/badge.svg?branch=master)](https://coveralls.io/github/miros/clean_mixer?branch=master)
+[![Build Status](https://travis-ci.com/funbox/clean_mixer.svg?branch=master)](https://travis-ci.com/miros/clean_mixer)
+[![Coverage Status](https://coveralls.io/repos/github/funbox/clean_mixer/badge.svg?branch=master)](https://coveralls.io/github/funbox/clean_mixer?branch=master)
 
 <a href="https://funbox.ru">
   <img src="http://funbox.ru/badges/sponsored_by_funbox_compact.svg" alt="Sponsored by FunBox" width=250 />
