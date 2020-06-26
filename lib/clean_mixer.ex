@@ -16,9 +16,9 @@ defmodule CleanMixer do
     project(options).arch_map
   end
 
-  @spec workspace() :: Workspace.t()
-  def workspace() do
-    project() |> Workspace.new()
+  @spec workspace(CodeCartographer.options()) :: Workspace.t()
+  def workspace(options \\ []) do
+    project(options) |> Workspace.new()
   end
 
   @moduledoc false

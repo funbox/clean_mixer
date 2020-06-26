@@ -42,6 +42,21 @@ defmodule CleanMixer.WorkspaceTest do
     end
   end
 
+  describe "reject_hex_packs" do
+    test "returns dependencies of given component" do
+      comp1 = Component.new("comp1")
+      comp2 = Component.new("comp2")
+      hex_comp = Component.new("hex_comp", [], [], tags: [hex_pack: true])
+
+      dependencies = [
+        Dependency.new(comp1, comp2),
+        Dependency.new(comp1, hex_comp)
+      ]
+
+      assert Workspace.reject_hex_packs(dependencies) == [Dependency.new(comp1, comp2)]
+    end
+  end
+
   describe "usages_of" do
     test "returns dependencies of given component" do
       comp1 = Component.new("comp1")

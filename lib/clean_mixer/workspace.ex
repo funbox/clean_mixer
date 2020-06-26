@@ -48,6 +48,11 @@ defmodule CleanMixer.Workspace do
     end)
   end
 
+  @spec reject_hex_packs(list(Dependency.t())) :: list(Dependency.t())
+  def reject_hex_packs(deps) do
+    Enum.reject(deps, &Component.hex_pack?(&1.target))
+  end
+
   @spec usages_of(t, Component.name()) :: list(Dependency.t())
   def usages_of(workspace, comp_name) do
     comp = component(workspace, comp_name)
