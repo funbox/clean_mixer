@@ -69,6 +69,15 @@ mix clean_mixer.plantuml -v
 
 # you can group components by :group tag
 mix clean_mixer.plantuml --group
+
+# you can filter list by source and target components
+mix clean_mixer.plantuml --sources="some/component" --targets="other/component"
+
+# you can use wildcard
+mix clean_mixer.plantuml --sources="*some-pattern*"
+
+# you can filter by several components
+mix clean_mixer.plantuml --sources="some-component,other-component"
 ```
 
 **Metrics provided:**

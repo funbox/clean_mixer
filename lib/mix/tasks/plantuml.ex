@@ -7,6 +7,7 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
   alias CleanMixer.Metrics.MetricsMap
   alias CleanMixer.ArchMap
   alias CleanMixer.UI.CLI
+  alias CleanMixer.UI.ArchMapFilter
 
   @default_file_name "clean_mixer"
   def default_file_name, do: @default_file_name
@@ -23,6 +24,7 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
     arch_map =
       CleanMixer.arch_map(include_hex: params[:include_hex])
       |> skip_components(params[:except])
+      |> ArchMapFilter.filter(params)
 
     component_metrics = MetricsMap.compute_component_metrics(arch_map)
     dependency_metrics = MetricsMap.compute_dep_metrics(arch_map, component_metrics)
@@ -42,24 +44,25 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
       name: "clean_mixer.plantuml",
       description: @shortdoc,
       parse_double_dash: true,
-      options: [
-        except: [
-          value_name: "EXCEPT",
-          long: "--except",
-          help: "Component names to skip (comma delimited)",
-          parser: fn s -> {:ok, String.split(s, ",")} end,
-          default: [],
-          required: false
-        ],
-        output_file: [
-          value_name: "OUTPUT_FILE",
-          long: "--output-file",
-          short: "-o",
-          help: "Output file name.",
-          default: @default_file_name,
-          required: false
-        ]
-      ],
+      options:
+        [
+          except: [
+            value_name: "EXCEPT",
+            long: "--except",
+            help: "component names to skip (comma delimited)",
+            parser: fn s -> {:ok, String.split(s, ",")} end,
+            default: [],
+            required: false
+          ],
+          output_file: [
+            value_name: "OUTPUT_FILE",
+            long: "--output-file",
+            short: "-o",
+            help: "Output file name.",
+            default: @default_file_name,
+            required: false
+          ]
+        ] ++ ArchMapFilter.cli_options(),
       flags: [
         verbose: [
           value_name: "VERBOSE",

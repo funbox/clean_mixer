@@ -36,6 +36,17 @@ defmodule Mix.Tasks.CleanMixer.PlantumlTest do
     refute plant_uml =~ "[compiler_manifests]"
   end
 
+  test "filters components by source and target deps" do
+    capture_io(fn ->
+      Mix.Task.rerun("clean_mixer.plantuml", ["-s", "arch_map", "-t", "code_map"])
+    end)
+
+    plantuml = File.read!("clean_mixer.plantuml")
+
+    assert plantuml =~ ~r/\[arch_map\] .+-> \[code_map\]/
+    refute plantuml =~ ~r/\[compiler_manifests\] .+-> \[code_map\]/
+  end
+
   test "it can group components" do
     capture_io(fn ->
       Mix.Task.rerun("clean_mixer.plantuml", ["--group"])
