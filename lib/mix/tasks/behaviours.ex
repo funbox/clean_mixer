@@ -96,7 +96,7 @@ defmodule Mix.Tasks.CleanMixer.Behaviours do
 
       _else ->
         behaviours
-        |> Enum.reduce(&Map.merge/2)
+        |> Enum.reduce(&Map.merge(&1, &2, fn _key, val1, val2 -> Enum.uniq(val1 ++ val2) end))
         |> Enum.map_join("\n\n", &render_behaviour/1)
     end
   end
