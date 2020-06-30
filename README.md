@@ -142,6 +142,18 @@ mix clean_mixer.component_cycles
 mix clean_mixer.file_cycles
 ```
 
+**List behaviours and their implementations:**
+
+```
+mix clean_mixer.behaviours
+
+# you can filter by behaviour
+mix clean_mixer.list -b "*.Inspect"
+
+# you can filter by component
+mix clean_mixer.list -c "some-component"
+```
+
 ## Validation
 
 You can use clean_mixer internal api to make some basic assertions about projects architecture:

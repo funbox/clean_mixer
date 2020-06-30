@@ -25,20 +25,33 @@ defmodule CleanMixer.CodeMap.CodeModule do
 
   @spec behaviour?(name) :: boolean
   def behaviour?(module_name) do
-    {:module, _} = Code.ensure_loaded(module_name)
+    load(module_name)
     function_exported?(module_name, :behaviour_info, 1)
+  end
+
+  @spec implemented_behaviours(name) :: [name]
+  def implemented_behaviours(module_name) do
+    load(module_name)
+
+    module_name.module_info(:attributes)
+    |> Keyword.get(:behaviour, [])
   end
 
   @spec struct?(name) :: boolean
   def struct?(module_name) do
-    {:module, _} = Code.ensure_loaded(module_name)
+    load(module_name)
     function_exported?(module_name, :__struct__, 0)
   end
 
   @spec has_functions?(name) :: boolean
   def has_functions?(module_name) do
-    {:module, _} = Code.ensure_loaded(module_name)
+    load(module_name)
     public_functions(module_name) != []
+  end
+
+  defp load(module_name) do
+    {:module, _} = Code.ensure_loaded(module_name)
+    :ok
   end
 
   @spec public_functions(name) :: list()
