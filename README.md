@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/funbox/clean_mixer.svg?branch=master)](https://travis-ci.com/miros/clean_mixer)
+[![Build Status](https://travis-ci.com/funbox/clean_mixer.svg?branch=master)](https://travis-ci.com/funbox/clean_mixer)
 [![Coverage Status](https://coveralls.io/repos/github/funbox/clean_mixer/badge.svg?branch=master)](https://coveralls.io/github/funbox/clean_mixer?branch=master)
 
 <a href="https://funbox.ru">
