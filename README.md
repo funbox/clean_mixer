@@ -1,18 +1,14 @@
+# Clean Mixer
+
 [![Build Status](https://travis-ci.org/funbox/clean_mixer.svg?branch=master)](https://travis-ci.org/funbox/clean_mixer)
 [![Coverage Status](https://coveralls.io/repos/github/funbox/clean_mixer/badge.svg?branch=master)](https://coveralls.io/github/funbox/clean_mixer?branch=master)
 
-<a href="https://funbox.ru">
-  <img src="http://funbox.ru/badges/sponsored_by_funbox_compact.svg" alt="Sponsored by FunBox" width=250 />
-</a>
-
-# Clean Mixer
-
 Tools for code architecture analysis and validation.
-Heavily inspired by Bob Martin's Clean Architecture and to some extent ArchUnit library.
+Heavily inspired by Bob Martin's “Clean Architecture” and to some extent ArchUnit library.
 
 ## Usage
 
-Add clean_mixer to your list of dependencies in mix.exs:
+Add `clean_mixer` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
@@ -20,7 +16,7 @@ def deps do
 end
 ```
 
-To generate plantuml diagrams you need to have graphviz (https://graphviz.gitlab.io/) and jre installed.
+To generate PlantUML diagrams you need to have [graphviz](https://graphviz.gitlab.io/) and JRE installed.
 
 Configure components of your codebase in `.clean_mixer.exs`
 
@@ -40,7 +36,7 @@ Each component is just an arbitrary folder with code and name. You can model com
 
 Note that components can be nested in each other, although architecturally it is not recommended and in some cases might yield confusing results.
 
-Components can have optional arbitrary tags. But the only currently used tag is `:group` which is used to optionally group components in plantuml diagram.
+Components can have optional arbitrary tags. But the only currently used tag is `:group` which is used to optionally group components in PlantUML diagram.
 
 ## Visualization and analysis
 
@@ -49,9 +45,11 @@ cd clean_mixer
 mix clean_mixer.plantuml -v
 ```
 
-![clean_mixer.png](https://raw.githubusercontent.com/miros/clean_mixer/master/clean_mixer_example.png)
+<p align="center">
+  <img width="578" height="704" src="https://raw.githubusercontent.com/miros/clean_mixer/master/clean_mixer_example.png">
+</p>
 
-**Render component dependencies in plantuml:**
+**Render component dependencies in PlantUML:**
 
 ```
 mix clean_mixer.plantuml
@@ -82,7 +80,7 @@ mix clean_mixer.plantuml --sources="some-component,other-component"
 
 **Metrics provided:**
 
-For in depth description of metrics (in, out, I, A, D) and principles please refer to Bob Martin's Clean Architecture book (Chapter 14).
+For in depth description of metrics (in, out, I, A, D) and principles please refer to Bob Martin's “Clean Architecture” book (Chapter 14).
 
 * in = number of incoming dependencies on current component files
 * out = number of outgoing dependencies on other components files
@@ -95,7 +93,7 @@ For in depth description of metrics (in, out, I, A, D) and principles please ref
 * Aout = Abstract in = number of dependencies on other components behaviours
 * U = Usage = percent of current component files that are public (used by others)
 
-Component links are coloured red on a diagramm if the Stable Dependencies Principle (Depend in the direction of stability) is violated.
+Component links are coloured red on a diagram if the Stable Dependencies Principle (Depend in the direction of stability) is violated.
 
 **List all project components and their dependencies:**
 
@@ -156,7 +154,7 @@ mix clean_mixer.list -c "some-component"
 
 ## Validation
 
-You can use clean_mixer internal api to make some basic assertions about projects architecture:
+You can use `clean_mixer` internal API to make some basic assertions about projects architecture:
 
 ```elixir
 ExUnit.start(capture_log: true, trace: true)
@@ -198,3 +196,5 @@ Run tests:
 ```
 mix run --no-start test/arch_test.exs
 ```
+
+[![Sponsored by FunBox](https://funbox.ru/badges/sponsored_by_funbox_centered.svg)](https://funbox.ru)
