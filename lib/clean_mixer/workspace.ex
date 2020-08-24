@@ -88,9 +88,9 @@ defmodule CleanMixer.Workspace do
     end)
   end
 
-  @spec use_project(t, project_action) :: action_result :: any
-  def use_project(workspace, action_fun) do
-    GenServer.call(workspace, {:use_project, action_fun})
+  @spec use_project(t, project_action, timeout()) :: action_result :: any
+  def use_project(workspace, action_fun, timeout_ms \\ 15_000) do
+    GenServer.call(workspace, {:use_project, action_fun}, timeout_ms)
   end
 
   defmodule State do
