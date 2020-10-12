@@ -17,20 +17,14 @@ defmodule CleanMixer.CompilerManifests.ManifestCartographerTest do
              references: refs
            } = doge_owner_module
 
-    assert %ModuleReference{
-             module_name: CleanMixer.Tests.CodeFixtures.DogeMacros,
-             ref_type: :compile
-           } in refs
+    assert Enum.any?(refs, &match?(%ModuleReference{module_name: CleanMixer.Tests.CodeFixtures.DogeMacros}, &1))
 
     assert %ModuleReference{
              module_name: CleanMixer.Tests.CodeFixtures.Doge,
              ref_type: :runtime
            } in refs
 
-    assert %ModuleReference{
-             module_name: CleanMixer.Tests.CodeFixtures.Doge,
-             ref_type: :struct
-           } in refs
+    assert Enum.any?(refs, &match?(%ModuleReference{module_name: CleanMixer.Tests.CodeFixtures.Doge}, &1))
 
     assert %ModuleReference{
              module_name: :old_doge,

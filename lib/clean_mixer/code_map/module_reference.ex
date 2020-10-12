@@ -1,7 +1,8 @@
 defmodule CleanMixer.CodeMap.ModuleReference do
   alias CleanMixer.CodeMap.CodeModule
 
-  @type ref_type :: :compile | :struct | :runtime | :unknown
+  # struct is valid only for elixir versions < 1.11
+  @type ref_type :: :compile | :struct | :export | :runtime | :unknown
 
   defstruct [:module_name, :ref_type]
 
