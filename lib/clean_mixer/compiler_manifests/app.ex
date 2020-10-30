@@ -14,7 +14,7 @@ defmodule CleanMixer.CompilerManifests.App do
 
   @spec umbrella_project_apps(list(MixProject.mix_dep())) :: list(t)
   def umbrella_project_apps(deps) do
-    for %{app: app_name, scm: Mix.SCM.Path, opts: opts} <- deps, opts[:from_umbrella] do
+    for %{app: app_name, scm: Mix.SCM.Path, opts: opts} <- deps, umbrella_app?(opts) do
       %__MODULE__{
         path: opts[:path],
         build_path: opts[:build],
@@ -38,7 +38,7 @@ defmodule CleanMixer.CompilerManifests.App do
   def current_deps() do
     deps = Mix.Dep.load_on_environment(env: Mix.env())
 
-    for %{app: app_name, opts: opts} <- deps, !opts[:from_umbrella] do
+    for %{app: app_name, opts: opts} <- deps, !umbrella_app?(opts) do
       %__MODULE__{
         path: opts[:dest] |> Path.relative_to(File.cwd!()),
         build_path: opts[:build],
@@ -46,6 +46,10 @@ defmodule CleanMixer.CompilerManifests.App do
         manifest_path: manifest_path(opts[:build])
       }
     end
+  end
+
+  defp umbrella_app?(opts) do
+    opts[:from_umbrella] || opts[:in_umbrella]
   end
 
   defp manifest_path(build_path) do
