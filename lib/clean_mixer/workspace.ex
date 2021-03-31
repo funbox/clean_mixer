@@ -9,13 +9,17 @@ defmodule CleanMixer.Workspace do
   alias CleanMixer.CodeMap.SourceFile
   alias CleanMixer.Graph
 
-  @opaque t :: pid
+  @type options :: [timeout_ms: timeout()]
+
+  @opaque t :: {pid, options}
   @type project_action :: (Project.t() -> any)
 
-  @spec new(Project.t()) :: t
-  def new(project) do
+  @default_options [timeout_ms: 15_000]
+
+  @spec new(Project.t(), options) :: t
+  def new(project, options \\ []) do
     {:ok, pid} = GenServer.start_link(__MODULE__, [project])
-    pid
+    {pid, Keyword.merge(@default_options, options)}
   end
 
   @spec component(t, Component.name()) :: Component.t() | nil
@@ -88,9 +92,9 @@ defmodule CleanMixer.Workspace do
     end)
   end
 
-  @spec use_project(t, project_action, timeout()) :: action_result :: any
-  def use_project(workspace, action_fun, timeout_ms \\ 15_000) do
-    GenServer.call(workspace, {:use_project, action_fun}, timeout_ms)
+  @spec use_project(t, project_action) :: action_result :: any
+  def use_project({pid, options}, action_fun) do
+    GenServer.call(pid, {:use_project, action_fun}, options[:timeout_ms])
   end
 
   defmodule State do

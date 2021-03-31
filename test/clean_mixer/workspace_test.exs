@@ -38,7 +38,9 @@ defmodule CleanMixer.WorkspaceTest do
         ]
       }
 
-      assert workspace_for(arch_map) |> Workspace.dependencies_of("comp1") == [Dependency.new(comp1, comp2)]
+      assert workspace_for(arch_map) |> Workspace.dependencies_of("comp1") == [
+               Dependency.new(comp1, comp2)
+             ]
     end
   end
 
