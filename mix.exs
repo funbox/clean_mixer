@@ -1,10 +1,13 @@
 defmodule CleanMixer.MixProject do
   use Mix.Project
 
+  @source_url "https://github.com/funbox/clean_mixer"
+  @version "0.11.3"
+
   def project do
     [
       app: :clean_mixer,
-      version: "0.11.3",
+      version: @version,
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -19,8 +22,8 @@ defmodule CleanMixer.MixProject do
       ],
       test_coverage: [tool: ExCoveralls],
       package: package(),
-      description: description(),
-      dialyzer: dialyzer()
+      dialyzer: dialyzer(),
+      docs: docs()
     ]
   end
 
@@ -36,17 +39,14 @@ defmodule CleanMixer.MixProject do
   defp package do
     [
       name: :clean_mixer,
+      description: "Tools for code architecture analysis and linting",
       files: ["lib", "priv", "mix.exs", "README*", "LICENSE"],
       maintainers: ["Miroslav Malkin"],
-      licenses: ["Apache 2.0"],
+      licenses: ["Apache-2.0"],
       links: %{
-        "GitHub" => "https://github.com/funbox/clean_mixer"
+        "GitHub" => @source_url
       }
     ]
-  end
-
-  defp description() do
-    "Tools for code architecture analysis and linting"
   end
 
   defp deps do
@@ -77,5 +77,18 @@ defmodule CleanMixer.MixProject do
       file ->
         [plt_file: {:no_warn, file}]
     end
+  end
+
+  defp docs do
+    [
+      extras: [
+        LICENSE: [title: "License"],
+        "README.md": [title: "Overview"]
+      ],
+      main: "readme",
+      source_url: @source_url,
+      source_ref: "#v{@version}",
+      formatters: ["html"]
+    ]
   end
 end

@@ -2,21 +2,28 @@
 
 [![Build Status](https://travis-ci.org/funbox/clean_mixer.svg?branch=master)](https://travis-ci.org/funbox/clean_mixer)
 [![Coverage Status](https://coveralls.io/repos/github/funbox/clean_mixer/badge.svg?branch=master)](https://coveralls.io/github/funbox/clean_mixer?branch=master)
+[![Module Version](https://img.shields.io/hexpm/v/clean_mixer.svg)](https://hex.pm/packages/clean_mixer)
+[![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/clean_mixer/)
+[![Total Download](https://img.shields.io/hexpm/dt/clean_mixer.svg)](https://hex.pm/packages/clean_mixer)
+[![License](https://img.shields.io/hexpm/l/clean_mixer.svg)](https://github.com/funbox/clean_mixer/blob/master/LICENSE)
+[![Last Updated](https://img.shields.io/github/last-commit/funbox/clean_mixer.svg)](https://github.com/funbox/clean_mixer/commits/master)
 
 Tools for code architecture analysis and validation.
 Heavily inspired by Bob Martin's “Clean Architecture” and to some extent ArchUnit library.
 
 ## Usage
 
-Add `clean_mixer` to your list of dependencies in `mix.exs`:
+Add `:clean_mixer` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:clean_mixer, "~> 0.2", only: [:dev, :test], runtime: false}]
+  [
+    {:clean_mixer, "~> 0.2", only: [:dev, :test], runtime: false}
+  ]
 end
 ```
 
-To generate PlantUML diagrams you need to have [graphviz](https://graphviz.gitlab.io/) and JRE installed.
+To generate [PlantUML](https://plantuml.com/) diagrams you need to have [Graphviz](https://graphviz.gitlab.io/) and JRE installed.
 
 Configure components of your codebase in `.clean_mixer.exs`
 
@@ -53,28 +60,44 @@ mix clean_mixer.plantuml -v
 
 ```
 mix clean_mixer.plantuml
+```
 
+```
 mix clean_mixer.plantuml --help
+```
 
-# you can hide some components from diagramm
+You can hide some components from diagram:
+```
 mix clean_mixer.plantuml --except="some-component,other-component"
+```
 
-# also render hex depencies of your components
+Also render Hex dependencies of your components:
+```
 mix clean_mixer.plantuml --include-hex
+```
 
-# render metrics of links beween components
+Render metrics of links between components:
+```
 mix clean_mixer.plantuml -v
+```
 
-# you can group components by :group tag
+You can group components by `:group` tag:
+```
 mix clean_mixer.plantuml --group
+```
 
-# you can filter list by source and target components
+You can filter list by source and target components:
+```
 mix clean_mixer.plantuml --sources="some/component" --targets="other/component"
+```
 
-# you can use wildcard
+You can use wildcard:
+```
 mix clean_mixer.plantuml --sources="*some-pattern*"
+```
 
-# you can filter by several components
+You can filter by several components:
+```
 mix clean_mixer.plantuml --sources="some-component,other-component"
 ```
 
@@ -99,32 +122,46 @@ Component links are coloured red on a diagram if the Stable Dependencies Princip
 
 ```
 mix clean_mixer.list
+```
 
+```
 mix clean_mixer.list --help
+```
 
-# you can include hex depencies of your components
+You can include hex dependencies of your components:
+```
 mix clean_mixer.list --include-hex
+```
 
-# you can filter list by source and target components
+You can filter list by source and target components:
+```
 mix clean_mixer.list --sources="some/component" --targets="other/component"
+```
 
-# you can use wildcard
+You can use wildcard:
+```
 mix clean_mixer.list --sources="*some-pattern*"
+```
 
-# you can filter by several components
+You can filter by several components:
+```
 mix clean_mixer.list --sources="some-component,other-component"
+```
 
-# you can filter list by source and target dependencies between files
+You can filter list by source and target dependencies between files:
+```
 mix clean_mixer.list --file-sources="*/file1.ex" --file-targets="*/file2.ex"
 ```
 
 **List all project component usages:**
 
+Show components public files:
 ```
-# show components public files
 mix clean_mixer.list_usages
+```
 
-# show components public files and who uses them
+Show components public files and who uses them:
+```
 mix clean_mixer.list_usages -v
 ```
 
@@ -144,11 +181,15 @@ mix clean_mixer.file_cycles
 
 ```
 mix clean_mixer.behaviours
+```
 
-# you can filter by behaviour
+You can filter by behaviour:
+```
 mix clean_mixer.list -b "*.Inspect"
+```
 
-# you can filter by component
+You can filter by component:
+```
 mix clean_mixer.list -c "some-component"
 ```
 
@@ -196,5 +237,19 @@ Run tests:
 ```
 mix run --no-start test/arch_test.exs
 ```
+
+## Copyright and License
+
+Copyright (c) 2019 Miroslav Malkin
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 
 [![Sponsored by FunBox](https://funbox.ru/badges/sponsored_by_funbox_centered.svg)](https://funbox.ru)
