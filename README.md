@@ -25,6 +25,17 @@ end
 
 To generate [PlantUML](https://plantuml.com/) diagrams you need to have [Graphviz](https://graphviz.gitlab.io/) and JRE installed.
 
+Consult the `.tool-versions` file in this repo for a known good JRE version you can install with the [asdf](https://github.com/asdf-vm/asdf) version manager.
+
+### Note on Elixir Version Compatibility
+Clean Mixer works well with Elixir 1.10, and _may_ work with other Elixir versions.
+
+But it does not work with Elixir 1.12.1, as reported in [this issue]( https://github.com/funbox/clean_mixer/issues/6). Current testing suggests that Elixir releases after 1.12.1 will not work either.
+
+Investigation to come as time allows.
+
+### Component Usage
+
 Configure components of your codebase in `.clean_mixer.exs`
 
 ```elixir
