@@ -9,6 +9,8 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
   alias CleanMixer.UI.CLI
   alias CleanMixer.UI.ArchMapFilter
 
+  require Logger
+
   @default_file_name "clean_mixer"
   def default_file_name, do: @default_file_name
 
@@ -95,7 +97,14 @@ defmodule Mix.Tasks.CleanMixer.Plantuml do
 
   defp render_image(uml_data, filename) do
     File.write!(filename, uml_data)
-    Mix.Shell.IO.cmd("env PLANTUML_LIMIT_SIZE=16384 java -jar #{planutml_jar_path()} #{filename}")
+    Logger.debug("uml filename: #{filename}")
+    Logger.debug("uml data: #{inspect(uml_data)}")
+    # result = Mix.Shell.IO.cmd("env PLANTUML_LIMIT_SIZE=16384 java -jar #{planutml_jar_path()} #{filename}")
+    result = System.cmd("env", ["PLANTUML_LIMIT_SIZE=16384", "java", "-jar", planutml_jar_path(), filename])
+
+    # jreleaser                     https://github.com/joschi/asdf-jreleaser.git
+    # java                          https://github.com/halcyon/asdf-java.git
+    Logger.debug(inspect(result))
   end
 
   defp planutml_jar_path() do

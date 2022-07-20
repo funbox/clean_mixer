@@ -7,6 +7,8 @@ defmodule CleanMixer.Project do
   alias CleanMixer.CompilerManifests.ManifestCartographer
   alias CleanMixer.CompilerManifests.App
 
+  require Logger
+
   defstruct code_map: nil,
             arch_map: nil
 
@@ -20,6 +22,7 @@ defmodule CleanMixer.Project do
   @spec new(ArchConfig.t(), CodeCartographer.options()) :: t
   def new(config, options \\ [], {CodeCartographer, code_cartographer} \\ @default_cartographer) do
     code_map = code_cartographer.get_code_map(options)
+    # Logger.debug("#{__MODULE__}.new/2 code_map: #{inspect(code_map)}")
 
     arch_map =
       make_arch_map(config.component_map ++ hex_packs(), code_map)

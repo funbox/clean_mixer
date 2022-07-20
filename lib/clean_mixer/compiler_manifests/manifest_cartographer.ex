@@ -11,6 +11,8 @@ defmodule CleanMixer.CompilerManifests.ManifestCartographer do
   alias Mix.Compilers.Elixir, as: Compiler
   alias CleanMixer.CompilerManifests.App
 
+  require Logger
+
   @impl CodeCartographer
   def get_code_map(options \\ []) do
     apps =
@@ -52,8 +54,13 @@ defmodule CleanMixer.CompilerManifests.ManifestCartographer do
   end
 
   defp read_manifest(%App{manifest_path: manifest_path}) do
-    manifest_path
-    |> Compiler.read_manifest()
+    the_manifest =
+      manifest_path
+      |> Compiler.read_manifest()
+
+    # Logger.debug("#{__MODULE__}.read_manifest/1 the_manifest: #{inspect(the_manifest)}")
+
+    the_manifest
     |> Manifest.parse()
   end
 end

@@ -7,11 +7,32 @@ defmodule CleanMixer.UI.ArchMapRendering.TextRenderes.Dependencies do
   alias CleanMixer.UI.ArchMapRendering.TextRenderer
   @behaviour TextRenderer
 
+  require Logger
+
   @impl TextRenderer
   def render(%ArchMap{} = arch_map, _options \\ []) do
-    arch_map.components
-    |> Enum.map(&{&1, ArchMap.dependencies_of(arch_map, &1)})
-    |> with_dependencies()
+    step1 = arch_map.components
+
+    # Logger.debug("#{__MODULE__} render/2 step1 #{inspect(step1)}")
+    # Logger.debug("#{__MODULE__} render/2 step1 length #{Enum.count(step1)}")
+    # Logger.debug("#{__MODULE__} render/2 step1[0] #{inspect(Enum.at(step1, 0), limit: :infinity)}")
+    # Logger.debug("#{__MODULE__} render/2 step1[1] #{inspect(Enum.at(step1, 1), limit: :infinity)}")
+    # Logger.debug("#{__MODULE__} render/2 step1[2] #{inspect(Enum.at(step1, 2), limit: :infinity)}")
+    # Logger.debug("#{__MODULE__} render/2 step1[3] #{inspect(Enum.at(step1, 3), limit: :infinity)}")
+
+    step2 =
+      step1
+      |> Enum.map(&{&1, ArchMap.dependencies_of(arch_map, &1)})
+
+    # Logger.debug("#{__MODULE__} render/2 step2 #{inspect(step2)}")
+
+    step3 =
+      step2
+      |> with_dependencies()
+
+    # Logger.debug("#{__MODULE__} render/2 step3 #{inspect(step3)}")
+
+    step3
     |> Enum.map_join("\n\n", &format_component/1)
   end
 

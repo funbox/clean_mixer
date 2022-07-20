@@ -14,7 +14,8 @@ defmodule CleanMixer.ArchMap do
 
   defimpl Inspect do
     def inspect(arch_map, opts) do
-      Inspect.Any.inspect(arch_map, %Inspect.Opts{opts | limit: 1})
+      # Inspect.Any.inspect(arch_map, %Inspect.Opts{opts | limit: 1})
+      Inspect.Any.inspect(arch_map, %Inspect.Opts{opts | limit: :infinity})
     end
   end
 
