@@ -14,12 +14,12 @@
 ** TODO remove debug scaffolding from mix.lock
 ** TODO remove debug scaffolding from test/clean_mixer_test.exs
 ** TODO remove debug scaffolding from test/mix/tasks/list_test.exs
-** TODO remove debug scaffolding from test/support/fixtures/arch_map_filter_1.10.txt
-** TODO remove debug scaffolding from test/support/fixtures/arch_map_filter_1.13.txt
-** TODO remove debug scaffolding from test/support/fixtures/arch_map_filter_1.13.txt
-** TODO remove debug scaffolding from test/support/fixtures/step1_1.13.2.txt
-** TODO remove debug scaffolding from test/support/fixtures/step1_1.13.txt
-** TODO remove debug scaffolding from test/support/fixtures/step1_1.13.txt
+** TODO remove transient test fixture test/support/fixtures/arch_map_filter_1.10.txt
+** DONE remove transient test fixture from test/support/fixtures/arch_map_filter_1.13.txt
+** DONE remove transient test fixture from test/support/fixtures/arch_map_filter_1.13.txt
+** DONE remove transient test fixture from test/support/fixtures/step1_1.13.2.txt
+** DONE remove transient test fixture from test/support/fixtures/step1_1.13.txt
+** DONE remove transient test fixture from test/support/fixtures/step1_1.13.txt
 ** TODO remove debug scaffolding from test/test_helper.exs
 ** TODO remove debug scaffolding from tools10
 ** TODO remove debug scaffolding from tools13
