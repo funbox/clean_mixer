@@ -14,8 +14,7 @@ defmodule CleanMixer.ArchMap do
 
   defimpl Inspect do
     def inspect(arch_map, opts) do
-      # Inspect.Any.inspect(arch_map, %Inspect.Opts{opts | limit: 1})
-      Inspect.Any.inspect(arch_map, %Inspect.Opts{opts | limit: :infinity})
+      Inspect.Any.inspect(arch_map, %Inspect.Opts{opts | limit: 1})
     end
   end
 
@@ -54,26 +53,12 @@ defmodule CleanMixer.ArchMap do
 
   @spec public_files(t, Component.t()) :: list(SourceFile.t())
   def public_files(%__MODULE__{} = arch_map, %Component{} = component) do
-    result =
-      arch_map
-      |> usages_of(component)
-      |> Enum.flat_map(& &1.files)
-      |> Enum.map(& &1.target)
-      |> Enum.uniq()
-      |> Enum.map(fn source_file -> meaningless_check(source_file) end)
-  end
-
-  defp meaningless_check(source_file) do
-    SourceFile.erlang?(source_file)
-    |> handle_meaningless_check(source_file)
-  end
-
-  defp handle_meaningless_check(true, source_file) do
-    source_file
-  end
-
-  defp handle_meaningless_check(_, source_file) do
-    source_file
+    arch_map
+    |> usages_of(component)
+    |> Enum.flat_map(& &1.files)
+    |> Enum.map(& &1.target)
+    |> Enum.uniq()
+    |> Enum.map(fn source_file -> deliberate_reference(source_file) end)
   end
 
   @spec except(t, list(Component.t())) :: t
@@ -132,5 +117,38 @@ defmodule CleanMixer.ArchMap do
 
   defp file_deps_of(component_deps) do
     Enum.flat_map(component_deps, & &1.files)
+  end
+
+  # this is a no-op. We only have it here so that the SourceFile dependency is deliberately
+  # referenced for the benefit of test suite consistency across Elixir versions.
+  #
+  # The test suite includes tests asserting that ArchMap components have dependencies on
+  # CodeMap components.
+  #
+  # This works fine in Elixir 1.10.4. But in Elixir 1.13.2, and probably earlier versions as well,
+  # the compiler does not register SourceFile as a runtime dependency simply by virtue of its
+  # being aliased and used in typespecs, as it seems to have done in Elixir 1.10.4.
+  #
+  # No doubt this change is due to the compiler optimization work the Elixir core team has been
+  # doing to speed up compile times.
+  #
+  # Anyway, rather than change the test suite for fear of missing out on important code paths,
+  # we introduce this explicit runtime reference to the CodeMap.SourceFile module that the
+  # Elixir compiler will see regardless of the Elixir version.
+  #
+  # It's possible that in the future, the Elixir compiler would figure out that this is actually
+  # a no-op, and optimize it out entirely. If the test suite starts failing again on future
+  # Elixir versions, this is where I would look.
+  defp deliberate_reference(source_file) do
+    SourceFile.erlang?(source_file)
+    |> handle_deliberate_reference(source_file)
+  end
+
+  defp handle_deliberate_reference(_is_erlang = true, source_file) do
+    source_file
+  end
+
+  defp handle_deliberate_reference(_is_erlang = false, source_file) do
+    source_file
   end
 end
