@@ -11,6 +11,36 @@ defmodule CleanMixer.CompilerManifests.Manifest do
     manifest_files(source_items, modules)
   end
 
+  def only_parse({module_items, source_items}) do
+    modules = manifest_modules(module_items)
+    manifest_files(source_items, modules)
+  end
+
+  def only_manifest_modules({items, _}) do
+    for Compiler.module(sources: [path | _], module: name) <- items do
+      CodeModule.new(name, path)
+    end
+  end
+
+  def only_manifest_files_source_params(items, modules) do
+    %{:items => items, :modules => modules}
+    # for source <- items do
+    #   source_params = Compiler.source(source)
+
+    # references =
+    #   references_of(:compile, source_params[:compile_references]) ++
+    #     references_of(:runtime, source_params[:runtime_references]) ++
+    #     references_of(:struct, source_params[:struct_references]) ++
+    #     references_of(:export, source_params[:export_references])
+
+    # %SourceFile{
+    #   path: source_params[:source],
+    #   modules: modules_for_path(source_params[:source], modules) |> Enum.map(& &1.name),
+    #   references: references
+    # }
+    # end
+  end
+
   defp manifest_modules(items) do
     for Compiler.module(sources: [path | _], module: name) <- items do
       CodeModule.new(name, path)

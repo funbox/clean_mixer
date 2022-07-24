@@ -13,6 +13,45 @@ defmodule CleanMixer.CompilerManifests.ManifestCartographer do
 
   require Logger
 
+  def get_code_map_for_apps(options \\ []) do
+    apps =
+      MixProject.current()
+      |> MixProject.apps()
+
+    apps =
+      if options[:include_hex] do
+        apps ++ App.current_deps()
+      else
+        apps
+      end
+
+    apps
+  end
+
+  def get_code_map_for_manifests(options \\ []) do
+    apps = get_code_map_for_apps(options)
+
+    elixir_manifests =
+      apps
+      |> Enum.map(&app_manifest_files/1)
+      |> List.flatten()
+
+    elixir_manifests
+  end
+
+  def get_code_map_for_merged_xrefs(options \\ []) do
+    apps = get_code_map_for_apps(options)
+
+    options
+    |> get_code_map_for_manifests()
+    |> merge(XrefSource.get(apps))
+  end
+
+  def just_read_manifest(manifest_path) do
+    manifest_path
+    |> Compiler.read_manifest()
+  end
+
   @impl CodeCartographer
   def get_code_map(options \\ []) do
     apps =

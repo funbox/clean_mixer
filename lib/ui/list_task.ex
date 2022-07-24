@@ -21,6 +21,20 @@ defmodule CleanMixer.UI.ListTask do
 
   @spec run(list(String.t()), TextRenderer.t()) :: :ok
   def run(args, renderer, extra_cli_desc \\ []) do
+    Mix.Task.run("compile")
+
+    params = parse_params(args, extra_cli_desc)
+
+    CleanMixer.arch_map(include_hex: params[:include_hex])
+    |> ArchMapFilter.filter(params)
+    |> renderer.render(params)
+    |> IO.puts()
+
+    :ok
+  end
+
+  @spec debug_run(list(String.t()), TextRenderer.t()) :: :ok
+  def debug_run(args, renderer, extra_cli_desc \\ []) do
     Logger.configure(level: :debug, truncate: :infinity)
     #   * `:truncate` - the maximum message size to be logged (in bytes).
     # Defaults to 8192 bytes. Note this configuration is approximate.

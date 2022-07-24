@@ -54,11 +54,26 @@ defmodule CleanMixer.ArchMap do
 
   @spec public_files(t, Component.t()) :: list(SourceFile.t())
   def public_files(%__MODULE__{} = arch_map, %Component{} = component) do
-    arch_map
-    |> usages_of(component)
-    |> Enum.flat_map(& &1.files)
-    |> Enum.map(& &1.target)
-    |> Enum.uniq()
+    result =
+      arch_map
+      |> usages_of(component)
+      |> Enum.flat_map(& &1.files)
+      |> Enum.map(& &1.target)
+      |> Enum.uniq()
+      |> Enum.map(fn source_file -> meaningless_check(source_file) end)
+  end
+
+  defp meaningless_check(source_file) do
+    SourceFile.erlang?(source_file)
+    |> handle_meaningless_check(source_file)
+  end
+
+  defp handle_meaningless_check(true, source_file) do
+    source_file
+  end
+
+  defp handle_meaningless_check(_, source_file) do
+    source_file
   end
 
   @spec except(t, list(Component.t())) :: t
