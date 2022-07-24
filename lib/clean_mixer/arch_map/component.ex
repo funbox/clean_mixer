@@ -23,8 +23,6 @@ defmodule CleanMixer.ArchMap.Component do
 
   @spec new(name, list(SourceFile.t()), list(FileDependency.t())) :: t
   def new(name, files \\ [], file_dependencies \\ [], meta \\ %{}) do
-    # files = Enum.map(files, fn file -> deliberate_reference(file) end)
-
     %__MODULE__{
       name: name,
       files: files,
@@ -85,55 +83,41 @@ defmodule CleanMixer.ArchMap.Component do
     |> String.trim_trailing(symbol)
   end
 
-  # this is a no-op. We only have it here so that the SourceFile dependency is deliberately
+  # this is a no-op. We only have it here so that the CodeModule dependency is deliberately
   # referenced for the benefit of test suite consistency across Elixir versions.
   #
   # The test suite includes tests asserting that ArchMap components have dependencies on
   # CodeMap components.
   #
   # This works fine in Elixir 1.10.4. But in Elixir 1.13.2, and probably earlier versions as well,
-  # the compiler does not register SourceFile as a runtime dependency simply by virtue of its
+  # the compiler does not register CodeModule as a runtime dependency simply by virtue of its
   # being aliased and used in typespecs, as it seems to have done in Elixir 1.10.4.
   #
   # No doubt this change is due to the compiler optimization work the Elixir core team has been
   # doing to speed up compile times.
   #
   # Anyway, rather than change the test suite for fear of missing out on important code paths,
-  # we introduce this explicit runtime reference to the CodeMap.SourceFile module that the
+  # we introduce this explicit runtime reference to the CodeMap.CodeModule module that the
   # Elixir compiler will see regardless of the Elixir version.
   #
   # It's possible that in the future, the Elixir compiler would figure out that this is actually
   # a no-op, and optimize it out entirely. If the test suite starts failing again on future
   # Elixir versions, this is where I would look.
-  # defp deliberate_reference(%SourceFile{} = file) do
-  #   file
-  #   |> SourceFile.erlang?()
-  #   |> handle_deliberate_reference(file)
-  # end
-
-  defp deliberate_reference(%CodeModule{} = file) do
-    file
+  defp deliberate_reference(%CodeModule{} = module) do
+    module
     |> SourceFile.abstract?()
-    |> handle_deliberate_reference(file)
+    |> handle_deliberate_reference(module)
   end
 
   defp deliberate_reference(value) do
     value
   end
 
-  # defp handle_deliberate_reference(_is_erlang_file = true, %SourceFile{} = file) do
-  #   file
-  # end
-
-  # defp handle_deliberate_reference(_is_erlang_file = false, %SourceFile{} = file) do
-  #   file
-  # end
-
-  defp handle_deliberate_reference(_is_abstract = true, %CodeModule{} = file) do
-    file
+  defp handle_deliberate_reference(_is_abstract = true, %CodeModule{} = module) do
+    module
   end
 
-  defp handle_deliberate_reference(_is_abstract = false, %CodeModule{} = file) do
-    file
+  defp handle_deliberate_reference(_is_abstract = false, %CodeModule{} = module) do
+    module
   end
 end
