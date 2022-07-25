@@ -70,12 +70,6 @@ defmodule Mix.Tasks.CleanMixer.ListTest do
 
       # Logger.debug("about to write value of actual_inspected to file")
       File.write!(filename, actual_inspected)
-      # Logger.debug("about to assert_value of actual_inspected")
-      # assert_value actual_inspected == File.read!("test/support/fixtures/step_one_b_1.10.4.txt")
-      # assert_value actual_inspected == File.read!(filename)
-      # assert_value actual_inspected == "test/support/fixtures/step1_1.10.4.txt"
-      # assert_value actual_inspected
-      # assert_value(actual_inspected == File.read!(filename))
       # val = Code.string_to_quoted!(actual_inspected)
       # val = Code.eval_string(actual_inspected)
       # Logger.debug("#{inspect(val)}")
@@ -94,21 +88,12 @@ defmodule Mix.Tasks.CleanMixer.ListTest do
       }
     end
 
-    # Add this to config/test.exs to avoid timeouts:
-    # ```elixir
-    # # Avoid timeouts while waiting for user input in assert_value
-    # config :ex_unit, timeout: :infinity
-    # config :my_app, MyApp.Repo,
-    #   timeout: :infinity,
-    #   ownership_timeout: :infinity
-    # ```
     @tag :pending
     test "x", %{:step1 => step1} do
       actual = ListTask.step2(step1, ["-s", "arch_map", "-t", "code_map"])
       # expected = step2_expected()
       actual_inspected = inspect(actual, limit: :infinity, printable_limit: :infinity, pretty: true, width: 98)
 
-      # assert_value(actual_inspected == File.read!("test/support/fixtures/arch_map_filter_1.13.txt"))
       # val = Code.string_to_quoted!(actual_inspected)
       val = Code.eval_string(actual_inspected)
       # Logger.debug("#{inspect(val)}")

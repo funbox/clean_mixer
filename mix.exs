@@ -56,8 +56,7 @@ defmodule CleanMixer.MixProject do
       {:excoveralls, "~> 0.11", only: :test},
       {:excoveralls_linter, "~> 0.0.1", only: :test},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
-      {:earmark, "~> 1.4", only: :dev, runtime: false},
-      {:assert_value, "~> 0.10.0", only: [:dev, :test]}
+      {:earmark, "~> 1.4", only: :dev, runtime: false}
     ]
   end
 

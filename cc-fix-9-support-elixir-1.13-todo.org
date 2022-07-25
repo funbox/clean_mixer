@@ -6,12 +6,12 @@
 ** DONE remove debug scaffolding from .../text_renderers/dependencies.ex
 ** DONE remove debug scaffolding from lib/clean_mixer/arch_map.ex
 ** DONE remove debug scaffolding from lib/clean_mixer/arch_map/component.ex
-** TODO remove debug scaffolding from .formatter.exs
+** DONE remove debug scaffolding from .formatter.exs
 ** TODO remove debug scaffolding from arch_map_filter.exs
 ** TODO remove debug scaffolding from .tool-versions
 ** TODO remove debug scaffolding from lib/ui/list_task.ex
-** TODO remove debug scaffolding from mix.exs
-** TODO remove debug scaffolding from mix.lock
+** DONE remove debug scaffolding from mix.exs
+** DONE remove debug scaffolding from mix.lock
 ** TODO remove debug scaffolding from test/clean_mixer_test.exs
 ** TODO remove debug scaffolding from test/mix/tasks/list_test.exs
 ** DONE remove debug scaffolding from lib/clean_mixer/compiler_manifests/manifest.ex
