@@ -25,6 +25,19 @@ end
 
 To generate [PlantUML](https://plantuml.com/) diagrams you need to have [Graphviz](https://graphviz.gitlab.io/) and JRE installed.
 
+Consult the `.tool-versions` file in this repo for a known good JRE version you can install with the [asdf](https://github.com/asdf-vm/asdf) version manager.
+
+### Note on Elixir Version Compatibility
+As the Elixir core team continues to optimize the compiler, please be aware that changing your version of Elixir _may_ alter the results Clean Mixer provides.
+
+For example, in Elixir 1.10.4-otp-22, if module A referenced module B only by declaring an alias to module B, the compiler marked that reference as a :runtime reference _regardless_ of whether code in module A ever actually called module B.
+
+In more modern Elixir versions, specifically 1.13.2 as tested, the compiler is smart enough to realize that such a stray alias is not really a reference worth recompiling dependencies for _unless_ module A indeed calls code in module B.
+
+Because Clean Mixer relies upon the compiler's interpretation of these situations, Clean Mixer may therefore produce different output against the same code base when the Elixir version has changed. Probably not catastrophic, but we wanted you to be aware.
+
+### Component Usage
+
 Configure components of your codebase in `.clean_mixer.exs`
 
 ```elixir

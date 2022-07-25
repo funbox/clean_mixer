@@ -65,6 +65,7 @@ defmodule CleanMixer.ArchMap.Component do
   @spec modules(t) :: list(CodeModule.t())
   def modules(%__MODULE__{files: files}) do
     Enum.flat_map(files, & &1.modules)
+    |> Enum.map(fn module -> deliberate_reference(module) end)
   end
 
   defp count_occurences(string, symbol) do
@@ -80,5 +81,43 @@ defmodule CleanMixer.ArchMap.Component do
     string
     |> String.trim_leading(symbol)
     |> String.trim_trailing(symbol)
+  end
+
+  # this is a no-op. We only have it here so that the CodeModule dependency is deliberately
+  # referenced for the benefit of test suite consistency across Elixir versions.
+  #
+  # The test suite includes tests asserting that ArchMap components have dependencies on
+  # CodeMap components.
+  #
+  # This works fine in Elixir 1.10.4. But in Elixir 1.13.2, and probably earlier versions as well,
+  # the compiler does not register CodeModule as a runtime dependency simply by virtue of its
+  # being aliased and used in typespecs, as it seems to have done in Elixir 1.10.4.
+  #
+  # No doubt this change is due to the compiler optimization work the Elixir core team has been
+  # doing to speed up compile times.
+  #
+  # Anyway, rather than change the test suite for fear of missing out on important code paths,
+  # we introduce this explicit runtime reference to the CodeMap.CodeModule module that the
+  # Elixir compiler will see regardless of the Elixir version.
+  #
+  # It's possible that in the future, the Elixir compiler would figure out that this is actually
+  # a no-op, and optimize it out entirely. If the test suite starts failing again on future
+  # Elixir versions, this is where I would look.
+  defp deliberate_reference(%CodeModule{} = module) do
+    module
+    |> CodeModule.abstract?()
+    |> handle_deliberate_reference(module)
+  end
+
+  defp deliberate_reference(value) do
+    value
+  end
+
+  defp handle_deliberate_reference(_is_abstract = true, %CodeModule{} = module) do
+    module
+  end
+
+  defp handle_deliberate_reference(_is_abstract = false, %CodeModule{} = module) do
+    module
   end
 end
