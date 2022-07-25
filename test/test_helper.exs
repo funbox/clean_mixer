@@ -1,1 +1,1 @@
-ExUnit.start(exclude: :pending)
+ExUnit.start()

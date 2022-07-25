@@ -12,7 +12,7 @@
 ** DONE remove debug scaffolding from lib/ui/list_task.ex
 ** DONE remove debug scaffolding from mix.exs
 ** DONE remove debug scaffolding from mix.lock
-** TODO remove debug scaffolding from test/clean_mixer_test.exs
+** DONE remove debug scaffolding from test/clean_mixer_test.exs
 ** DONE remove debug scaffolding from test/mix/tasks/list_test.exs
 ** DONE remove debug scaffolding from lib/clean_mixer/compiler_manifests/manifest.ex
 ** DONE remove transient test fixture test/support/fixtures/arch_map_filter_1.10.txt
@@ -21,11 +21,12 @@
 ** DONE remove transient test fixture from test/support/fixtures/step1_1.13.2.txt
 ** DONE remove transient test fixture from test/support/fixtures/step1_1.13.txt
 ** DONE remove transient test fixture from test/support/fixtures/step1_1.13.txt
-** TODO remove debug scaffolding from test/test_helper.exs
-** TODO remove debug scaffolding from tools10
-** TODO remove debug scaffolding from tools13
+** DONE remove debug scaffolding from test/test_helper.exs
+** DONE remove debug scaffolding from tools10
+** DONE remove debug scaffolding from tools13
 ** DONE remove transient tests/support/fixtures/ files
 ** DONE remove transient scratch.txt file
+** TODO make sure it runs as local ref in other projects
 ** TODO save this code snippet somewhere:
 ```
   defp inspect_into_file(term, basename) when is_binary(basename) do
