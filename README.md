@@ -28,11 +28,13 @@ To generate [PlantUML](https://plantuml.com/) diagrams you need to have [Graphvi
 Consult the `.tool-versions` file in this repo for a known good JRE version you can install with the [asdf](https://github.com/asdf-vm/asdf) version manager.
 
 ### Note on Elixir Version Compatibility
-Clean Mixer works well with Elixir 1.10, and _may_ work with other Elixir versions.
+As the Elixir core team continues to optimize the compiler, please be aware that changing your version of Elixir _may_ alter the results Clean Mixer provides.
 
-But it does not work with Elixir 1.12.1, as reported in [this issue]( https://github.com/funbox/clean_mixer/issues/6). Current testing suggests that Elixir releases after 1.12.1 will not work either.
+For example, in Elixir 1.10.4-otp-22, if module A referenced module B only by declaring an alias to module B, the compiler marked that reference as a :runtime reference _regardless_ of whether code in module A ever actually called module B.
 
-Investigation to come as time allows.
+In more modern Elixir versions, specifically 1.13.2 as tested, the compiler is smart enough to realize that such a stray alias is not really a reference worth recompiling dependencies for _unless_ module A indeed calls code in module B.
+
+Because Clean Mixer relies upon the compiler's interpretation of these situations, Clean Mixer may therefore produce different output against the same code base when the Elixir version has changed. Probably not catastrophic, but we wanted you to be aware.
 
 ### Component Usage
 
