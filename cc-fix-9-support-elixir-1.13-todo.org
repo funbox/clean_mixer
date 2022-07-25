@@ -7,13 +7,13 @@
 ** DONE remove debug scaffolding from lib/clean_mixer/arch_map.ex
 ** DONE remove debug scaffolding from lib/clean_mixer/arch_map/component.ex
 ** DONE remove debug scaffolding from .formatter.exs
-** TODO remove debug scaffolding from arch_map_filter.exs
+** DONE remove debug scaffolding from arch_map_filter.exs
 ** TODO remove debug scaffolding from .tool-versions
-** TODO remove debug scaffolding from lib/ui/list_task.ex
+** DONE remove debug scaffolding from lib/ui/list_task.ex
 ** DONE remove debug scaffolding from mix.exs
 ** DONE remove debug scaffolding from mix.lock
 ** TODO remove debug scaffolding from test/clean_mixer_test.exs
-** TODO remove debug scaffolding from test/mix/tasks/list_test.exs
+** DONE remove debug scaffolding from test/mix/tasks/list_test.exs
 ** DONE remove debug scaffolding from lib/clean_mixer/compiler_manifests/manifest.ex
 ** DONE remove transient test fixture test/support/fixtures/arch_map_filter_1.10.txt
 ** DONE remove transient test fixture from test/support/fixtures/arch_map_filter_1.13.txt
@@ -36,7 +36,36 @@
     )
   end
 
+  defp project_root do
+    Regex.replace(~r/\/_build.+\z/, Mix.Project.build_path(), "")
+  end
+
+  defp step2_expected do
+    "arch_map_filter.exs"
+    |> load()
+  end
+
+  defp load(filename) do
+    project_root()
+    |> Path.join(filename)
+    |> File.read!()
+    |> Code.eval_string()
+  end
+
   defp elixir_version_specific_fixture_filename(basename) when is_binary(basename) do
     "test/support/fixtures/#{basename}_#{System.version()}.txt"
   end
+
+  defp summarize_edit_script_verbs(keywords) when is_list(keywords) do
+    keywords
+    |> Enum.reduce(%{}, fn {verb, _nouns}, acc -> Map.put(acc, verb, Map.get(acc, verb, 0) + 1) end)
+  end
+
+  defp load_as_code(filename) do
+    filename
+    |> File.read!()
+    |> Code.eval_string()
+    |> elem(0)
+  end
+
   ```
