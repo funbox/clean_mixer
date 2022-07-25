@@ -105,7 +105,7 @@ defmodule CleanMixer.ArchMap.Component do
   # Elixir versions, this is where I would look.
   defp deliberate_reference(%CodeModule{} = module) do
     module
-    |> SourceFile.abstract?()
+    |> CodeModule.abstract?()
     |> handle_deliberate_reference(module)
   end
 
