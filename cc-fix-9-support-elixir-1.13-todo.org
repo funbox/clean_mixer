@@ -26,8 +26,14 @@
 ** DONE remove debug scaffolding from tools13
 ** DONE remove transient tests/support/fixtures/ files
 ** DONE remove transient scratch.txt file
-** TODO make sure it runs as local ref in other projects
-** TODO save this code snippet somewhere:
+** DONE make sure it runs as local ref in other projects
+** DONE fix all compiler warnings
+** DONE verify final diffs versus main branch
+** DONE update readme
+** DONE diagnose the error when running in Elixir 1.13: mix clean_mixer.list --include-hex
+*** this appears to be a problem only in the clean_mixer repo itself; running when clean_mixer is used in other projects seems to work just fine. So I'm choosing not to worry about this one.
+
+** DONE save this code snippet somewhere:
 ```
   defp inspect_into_file(term, basename) when is_binary(basename) do
     basename

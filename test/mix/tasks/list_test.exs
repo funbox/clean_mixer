@@ -1,6 +1,5 @@
 defmodule Mix.Tasks.CleanMixer.ListTest do
   use ExUnit.Case
-  alias CleanMixer.UI.ListTask
 
   import ExUnit.CaptureIO
 

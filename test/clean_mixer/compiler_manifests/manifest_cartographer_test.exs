@@ -5,7 +5,6 @@ defmodule CleanMixer.CompilerManifests.ManifestCartographerTest do
   alias CleanMixer.CodeMap
   alias CleanMixer.CodeMap.SourceFile
   alias CleanMixer.CodeMap.ModuleReference
-  alias CleanMixer.CompilerManifests.Manifest
 
   test "returns code map with files of current project" do
     assert %CodeMap{files: files} = ManifestCartographer.get_code_map()
